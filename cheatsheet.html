@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>CSE 4165 Web Programming - Final Exam Master Cheat Sheet</title>
+<style>
+  @page {
+    size: A4 portrait;
+    margin: 5mm;
+  }
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    font-size: 7.5pt;
+    line-height: 1.25;
+    color: #111827;
+    background: #fff;
+  }
+  .page {
+    width: 100%;
+    height: 287mm;
+    max-height: 287mm;
+    overflow: hidden;
+    page-break-after: always;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .page-header {
+    background: #1e293b;
+    color: #fff;
+    padding: 3px 6px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 3px;
+    margin-bottom: 4px;
+  }
+  .page-header h1 {
+    font-size: 9.5pt;
+    font-weight: 800;
+    letter-spacing: 0.3px;
+  }
+  .page-header .sub {
+    font-size: 7pt;
+    color: #94a3b8;
+  }
+  .page-header .badge {
+    background: #0284c7;
+    color: #fff;
+    padding: 1px 5px;
+    border-radius: 2px;
+    font-size: 6.5pt;
+    font-weight: 700;
+  }
+
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4px;
+    flex: 1;
+  }
+  .grid-3 {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 4px;
+    flex: 1;
+  }
+  .col {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .card {
+    border: 0.6px solid #cbd5e1;
+    border-radius: 3px;
+    background: #fff;
+    overflow: hidden;
+  }
+  .card-header {
+    padding: 2px 5px;
+    font-size: 7.5pt;
+    font-weight: 700;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 0.6px solid #cbd5e1;
+  }
+  .bg-blue { background: #e0f2fe; color: #0369a1; border-color: #bae6fd; }
+  .bg-green { background: #dcfce7; color: #15803d; border-color: #bbf7d0; }
+  .bg-purple { background: #f3e8ff; color: #7e22ce; border-color: #e9d5ff; }
+  .bg-amber { background: #fef3c7; color: #b45309; border-color: #fde68a; }
+  .bg-slate { background: #f1f5f9; color: #334155; border-color: #e2e8f0; }
+
+  .card-body {
+    padding: 3px 5px;
+    font-size: 7pt;
+  }
+
+  pre, code {
+    font-family: "Cascadia Code", Consolas, "Courier New", monospace;
+    font-size: 6.5pt;
+    line-height: 1.18;
+  }
+  pre {
+    background: #f8fafc;
+    border: 0.5px solid #e2e8f0;
+    border-radius: 2px;
+    padding: 2.5px 4px;
+    overflow: hidden;
+    white-space: pre-wrap;
+    word-break: break-all;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 6.6pt;
+    margin: 2px 0;
+  }
+  th, td {
+    border: 0.5px solid #cbd5e1;
+    padding: 1.5px 3px;
+    text-align: left;
+    vertical-align: top;
+  }
+  th {
+    background: #f1f5f9;
+    font-weight: 700;
+    color: #1e293b;
+  }
+
+  .hl { font-weight: 700; color: #0f172a; }
+  .kw { color: #2563eb; font-weight: 700; }
+  .str { color: #16a34a; }
+  .warn { color: #dc2626; font-weight: 700; }
+  .tag {
+    display: inline-block;
+    padding: 0 3px;
+    border-radius: 2px;
+    font-size: 6pt;
+    font-weight: 700;
+  }
+  .tag-js { background: #fef08a; color: #854d0e; }
+  .tag-php { background: #e0e7ff; color: #3730a3; }
+  .tag-sql { background: #fed7aa; color: #9a3412; }
+
+  .tip-box {
+    background: #fffbeb;
+    border-left: 2px solid #f59e0b;
+    padding: 2px 4px;
+    font-size: 6.5pt;
+    margin: 2px 0;
+  }
+</style>
+</head>
+<body>
+
+<!-- ============================================================================================== -->
+<!-- SIDE 1 : QUESTION 1 (JAVASCRIPT) & QUESTION 2 (PHP) SKELETONS, FORMULAS & DECODER              -->
+<!-- ============================================================================================== -->
+<div class="page">
+  <div class="page-header">
+    <div>
+      <h1>CSE 4165 FINAL EXAM CHEAT SHEET &bull; SIDE 1: JAVASCRIPT (Q1) & PHP LOGIC (Q2)</h1>
+      <span class="sub">Time: 1 hr 55 min | 30 Marks (Q1: 10M, Q2: 10M, Q3: 10M) | Strategy: Q1 30m &bull; Q2 35m &bull; Q3 45m &bull; Check 5m</span>
+    </div>
+    <span class="badge">A4 DUPLEX &bull; SIDE 1</span>
+  </div>
+
+  <div class="grid-2">
+    <!-- LEFT COLUMN: QUESTION 1 (JAVASCRIPT) -->
+    <div class="col">
+      <!-- Q1 SKELETON -->
+      <div class="card">
+        <div class="card-header bg-blue">
+          <span>Q1 SKELETON: HTML + JS FULL BOILERPLATE (10 MARKS)</span>
+          <span class="tag tag-js">JAVASCRIPT</span>
+        </div>
+        <div class="card-body">
+          <pre><code>&lt;!-- index.html --&gt;
+&lt;input type="text" id="itemName" placeholder="Name"&gt;
+&lt;input type="number" id="itemVal" step="any" placeholder="Value"&gt;
+&lt;button id="actionBtn"&gt;Add / Calculate&lt;/button&gt;
+&lt;label id="outLabel"&gt;&lt;/label&gt;
+&lt;script src="script.js"&gt;&lt;/script&gt;</code></pre>
+          <pre><code>// script.js
+const GOAL = 2000; // Target from question (e.g. 2000, 20, 100)
+let total = 0, count = 0;
+const historyList = []; // Keeps track of entries/readings
+
+const inputName = document.getElementById("itemName");
+const inputVal = document.getElementById("itemVal");
+const actionBtn = document.getElementById("actionBtn");
+const outLabel = document.getElementById("outLabel");
+
+function handleAction() {
+  const name = inputName ? inputName.value.trim() : "";
+  const val = parseFloat(inputVal.value);
+  if (isNaN(val) || val &lt;= 0) {
+    alert("Please enter a valid positive number");
+    return;
+  }
+  count++;
+  total += val;
+  if (name) historyList.push(name);
+  const avg = total / count;
+
+  // 4-Tier Ladder (Match exact wording in question)
+  let feedback = "";
+  if (total &lt;= 800)      feedback = "You’re off to a healthy start!";
+  else if (total &lt;= 1600) feedback = "Good progress, keep it balanced!";
+  else if (total &lt; GOAL)  feedback = "Almost at your limit!";
+  else                    feedback = "Goal reached! Stay mindful!";
+
+  // Exam Trap: Warning if user exceeds attempts/entries without reaching goal
+  if (count &gt; 10 &amp;&amp; total &lt; GOAL) {
+    feedback += " Be cautious of frequent snacking!";
+  }
+
+  // Display inside label field
+  outLabel.textContent = `Total: ${total} | Avg: ${parseFloat(avg.toFixed(2))} | Feedback: ${feedback}`;
+  inputVal.value = "";
+  if (inputName) inputName.value = "";
+}
+actionBtn.addEventListener("click", handleAction);</code></pre>
+        </div>
+      </div>
+
+      <!-- Q1 WORDING DECODER & FORMULAS -->
+      <div class="card">
+        <div class="card-header bg-slate">
+          <span>Q1 WORDING DECODER & FORMULA CHEAT BOX</span>
+        </div>
+        <div class="card-body">
+          <table>
+            <tr><th>Question Asks For...</th><th>JavaScript Exact Formula / Code</th></tr>
+            <tr><td><b>Running total / so far</b></td><td><code>let total = 0; total += val;</code> (outside function)</td></tr>
+            <tr><td><b>Average so far</b></td><td><code>const avg = total / count;</code></td></tr>
+            <tr><td><b>Store entered items/names</b></td><td><code>history.push(name); `[${history.join(", ")}]`</code></td></tr>
+            <tr><td><b>Number of entries / attempts</b></td><td><code>let count = 0; count++;</code> on every valid click</td></tr>
+            <tr><td><b>Warning on &gt; N entries without goal</b></td><td><code>if (count &gt; N &amp;&amp; total &lt; GOAL) msg += " Warning!";</code></td></tr>
+            <tr><td><b>Format to 2 decimal places</b></td><td><code>parseFloat(avg.toFixed(2))</code> (no trailing zeros: <code>+avg.toFixed(2)</code>)</td></tr>
+            <tr><td><b>Absolute difference |HR - 80|</b></td><td><code>Math.abs(hr - 80)</code></td></tr>
+            <tr><td><b>Password length pts (&ge;6 chars)</b></td><td><code>p.length &gt;= 6 ? Math.floor((p.length - 6) / 2) * 10 : 0</code></td></tr>
+            <tr><td><b>Regex: Uppercase / Lower / Digit / Symbol</b></td><td><code>/[A-Z]/.test(p)</code> &bull; <code>/[a-z]/.test(p)</code> &bull; <code>/[0-9]/.test(p)</code> &bull; <code>/[!@#$%^&*]/.test(p)</code></td></tr>
+            <tr><td><b>Average of an array</b></td><td><code>const avg = arr =&gt; arr.reduce((a,b) =&gt; a+b, 0) / arr.length;</code></td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT COLUMN: QUESTION 2 (PHP FORM & BUSINESS LOGIC) -->
+    <div class="col">
+      <!-- Q2 SKELETON -->
+      <div class="card">
+        <div class="card-header bg-green">
+          <span>Q2 SKELETON: HTML FORM + PHP LOGIC FULL BOILERPLATE (10 MARKS)</span>
+          <span class="tag tag-php">PHP</span>
+        </div>
+        <div class="card-body">
+          <pre><code>&lt;!-- form.html --&gt;
+&lt;form action="calculate.php" method="POST"&gt;
+  &lt;label&gt;Input 1: &lt;input type="number" name="val1" step="any" required&gt;&lt;/label&gt;&lt;br&gt;
+  &lt;label&gt;Input 2: &lt;input type="number" name="val2" step="any" required&gt;&lt;/label&gt;&lt;br&gt;
+  &lt;label&gt;Input 3: &lt;input type="number" name="val3" step="any" required&gt;&lt;/label&gt;&lt;br&gt;
+  &lt;input type="submit" value="Calculate"&gt;
+&lt;/form&gt;</code></pre>
+          <pre><code>&lt;?php // calculate.php
+// Always declare calculating function as specified by exam
+function processLogic($v1, $v2, $v3) {
+  // Pattern A: Ceiling Booking (venues, screens, battery modules)
+  $unitsNeeded = ceil($v1 / $v3);            // CANNOT book partial: ceil()
+  $totalCap    = $unitsNeeded * $v3;
+  $emptyUnits  = $totalCap - $v1;            // Unused capacity / empty seats
+  $wastedMoney = $emptyUnits * $v2;          // Wasted money based on rate
+
+  // Pattern B: Target Comparison (items*days vs target or credits*courses)
+  $totalProduced = $v1 * $v2;
+  $targetDiff    = $totalProduced - $v3;
+  if ($targetDiff == 0)      $targetMsg = "Target met exactly (0 difference)";
+  elseif ($targetDiff &gt; 0)  $targetMsg = "Above target by $targetDiff";
+  else                       $targetMsg = "Below target by " . abs($targetDiff);
+
+  // Pattern C: 4-Tier Performance / Efficiency Classification
+  $status = "";
+  if ($totalProduced &gt;= 500)      $status = "Excellent";
+  elseif ($totalProduced &gt;= 300)  $status = "Good";
+  elseif ($totalProduced &gt;= 150)  $status = "Average";
+  else                            $status = "Poor";
+
+  // Efficiency % pattern: unused / totalCarried
+  $unusedPct = ($totalCap &gt; 0) ? ($emptyUnits / $totalCap) * 100 : 0;
+  $effStatus = ($unusedPct &lt;= 10) ? "Efficient" : (($unusedPct &lt;= 25) ? "Acceptable" : "Wasteful");
+
+  return [
+    'units' =&gt; $unitsNeeded, 'empty' =&gt; $emptyUnits, 
+    'waste' =&gt; $wastedMoney, 'targetMsg' =&gt; $targetMsg, 'status' =&gt; $status
+  ];
+}
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+  $v1 = floatval($_POST['val1']);
+  $v2 = floatval($_POST['val2']);
+  $v3 = floatval($_POST['val3']);
+  $res = processLogic($v1, $v2, $v3);
+
+  // Render HTML Table matching exam sample output
+  echo "&lt;table border='1' cellpadding='6'&gt;";
+  echo "&lt;tr&gt;&lt;th&gt;Input 1&lt;/th&gt;&lt;th&gt;Input 2&lt;/th&gt;&lt;th&gt;Input 3&lt;/th&gt;&lt;th&gt;Units&lt;/th&gt;&lt;th&gt;Empty/Unused&lt;/th&gt;&lt;th&gt;Result&lt;/th&gt;&lt;/tr&gt;";
+  echo "&lt;tr&gt;&lt;td&gt;$v1&lt;/td&gt;&lt;td&gt;$v2&lt;/td&gt;&lt;td&gt;$v3&lt;/td&gt;&lt;td&gt;{$res['units']}&lt;/td&gt;&lt;td&gt;{$res['empty']}&lt;/td&gt;&lt;td&gt;{$res['status']}&lt;/td&gt;&lt;/tr&gt;";
+  echo "&lt;/table&gt;&lt;br&gt;&lt;a href='index.html'&gt;Back&lt;/a&gt;";
+} ?&gt;</code></pre>
+        </div>
+      </div>
+
+      <!-- Q2 WORDING DECODER & FORMULAS -->
+      <div class="card">
+        <div class="card-header bg-slate">
+          <span>Q2 WORDING DECODER & FORMULA CHEAT BOX</span>
+        </div>
+        <div class="card-body">
+          <table>
+            <tr><th>Question Keyword</th><th>Exact PHP Formula / Implementation</th></tr>
+            <tr><td><b>"Cannot book partial / minimum complete"</b></td><td><code>$units = ceil($totalPeople / $capacity);</code></td></tr>
+            <tr><td><b>"Empty seats / unused capacity"</b></td><td><code>$empty = ($units * $capacity) - $totalPeople;</code></td></tr>
+            <tr><td><b>"Money wasted on empty seats"</b></td><td><code>$waste = $empty * $ticketPrice;</code> (from sample table)</td></tr>
+            <tr><td><b>"Target met exactly / above / below by"</b></td><td><code>$d = $total - $target; if($d==0)... elseif($d&gt;0)... else abs($d)</code></td></tr>
+            <tr><td><b>"Best two CT marks out of three"</b></td><td><code>$bestAvg = (($ct1 + $ct2 + $ct3) - min($ct1, $ct2, $ct3)) / 2.0;</code></td></tr>
+            <tr><td><b>"Passed if total &gt; 54 otherwise Failed"</b></td><td><code>$status = ($total &gt; 54) ? "Passed" : "Failed";</code></td></tr>
+            <tr><td><b>"Unused energy &le; 10% of total carried"</b></td><td><code>$pct = ($unused / $totalCarried) * 100; if ($pct &le; 10) ...</code></td></tr>
+            <tr><td><b>Number format with commas (e.g. 8,400)</b></td><td><code>number_format($amount)</code> or <code>number_format($amount, 2)</code></td></tr>
+          </table>
+          <div class="tip-box">
+            <b>Exam Tip:</b> Story distractor costs (e.g. "venue costs 15,000 BDT") vs sample output: check the table! In 251 & 252, Wasted Money = <code>empty_seats * cost_per_person</code>.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================================================== -->
+<!-- SIDE 2 : QUESTION 3 (PHP & MYSQL) FULL BOILERPLATE, SQL DECODER DICTIONARY & PATTERNS          -->
+<!-- ============================================================================================== -->
+<div class="page">
+  <div class="page-header">
+    <div>
+      <h1>CSE 4165 FINAL EXAM CHEAT SHEET &bull; SIDE 2: PHP & MYSQL (Q3) & QUERY TRANSLATION</h1>
+      <span class="sub">Total Marks: 10M &bull; Hand-in: database.sql (50%) + solution.php (50%) &bull; Full PHP Code Required</span>
+    </div>
+    <span class="badge">A4 DUPLEX &bull; SIDE 2</span>
+  </div>
+
+  <div class="grid-2">
+    <!-- LEFT COLUMN: SQL SETUP SKELETON & FULL PHP-MYSQL TEMPLATE -->
+    <div class="col">
+      <!-- SQL DDL & DML SKELETON -->
+      <div class="card">
+        <div class="card-header bg-amber">
+          <span>Q3 PART 1: database.sql SKELETON (TABLE + SAMPLE DATA)</span>
+          <span class="tag tag-sql">SQL SETUP</span>
+        </div>
+        <div class="card-body">
+          <pre><code>CREATE DATABASE IF NOT EXISTS uiu_exam;
+USE uiu_exam;
+
+DROP TABLE IF EXISTS records;
+CREATE TABLE records (
+  id         INT PRIMARY KEY,
+  name       VARCHAR(100),
+  category   VARCHAR(50),
+  price      DECIMAL(10, 2),
+  stock      INT,
+  rating     DECIMAL(3, 1),
+  status     VARCHAR(50)
+);
+
+INSERT INTO records (id, name, category, price, stock, rating, status) VALUES
+(1, 'Item One', 'Electronics', 450.00, 10, 4.8, 'Active'),
+(2, 'Item Two', 'Electronics', 250.00, 5, 4.2, 'Active'),
+(3, 'Item Three', 'Furniture', 850.00, 8, 3.9, 'Pending'),
+(4, 'Item Four', 'Furniture', 120.00, 15, 4.5, 'Overdue');</code></pre>
+          <div style="font-size: 6.3pt; color: #475569; margin-top: 1px;">
+            <b>SQL Data Types:</b> <code>INT</code> whole numbers &bull; <code>VARCHAR(100)</code> text &bull; <code>DECIMAL(10,2)</code> money/fee &bull; <code>DECIMAL(3,1)</code> rating 4.5 &bull; Double single-quotes for apostrophe: <code>'Cox''s Bazar'</code>
+          </div>
+        </div>
+      </div>
+
+      <!-- FULL PHP-MYSQL EXECUTION SKELETON -->
+      <div class="card">
+        <div class="card-header bg-purple">
+          <span>Q3 PART 2: solution.php FULL EXAM SKELETON</span>
+          <span class="tag tag-php">PHP & MYSQL</span>
+        </div>
+        <div class="card-body">
+          <pre><code>&lt;?php
+// 1. Database Connection
+$conn = new mysqli("localhost", "root", "", "uiu_exam");
+if ($conn-&gt;connect_error) {
+  die("Connection failed: " . $conn-&gt;connect_error);
+}
+
+// 2. Reusable Helper: Executes SELECT and displays an HTML Table
+function showQuery($conn, $title, $sql) {
+  echo "&lt;h4&gt;$title&lt;/h4&gt;";
+  $result = $conn-&gt;query($sql);
+  if (!$result) { echo "Error: " . $conn-&gt;error; return; }
+  if ($result-&gt;num_rows &gt; 0) {
+    echo "&lt;table border='1' cellpadding='5'&gt;&lt;tr&gt;";
+    while ($f = $result-&gt;fetch_field()) echo "&lt;th&gt;{$f-&gt;name}&lt;/th&gt;";
+    echo "&lt;/tr&gt;";
+    while ($row = $result-&gt;fetch_assoc()) {
+      echo "&lt;tr&gt;";
+      foreach ($row as $val) echo "&lt;td&gt;$val&lt;/td&gt;";
+      echo "&lt;/tr&gt;";
+    }
+    echo "&lt;/table&gt;";
+  } else { echo "0 results found.&lt;br&gt;"; }
+}
+
+// 3. Reusable Helper: Executes UPDATE / DELETE queries
+function executeUpdate($conn, $title, $sql) {
+  echo "&lt;h4&gt;$title&lt;/h4&gt;";
+  if ($conn-&gt;query($sql) === TRUE) {
+    echo "Updated successfully. Rows affected: " . $conn-&gt;affected_rows . "&lt;br&gt;";
+  } else { echo "Update error: " . $conn-&gt;error . "&lt;br&gt;"; }
+}
+
+// Task 1: Category Aggregation
+$sql1 = "SELECT category, COUNT(*) AS total_items FROM records GROUP BY category";
+showQuery($conn, "Task 1: Category Count", $sql1);
+
+// Task 2: Conditional Update with WHERE ... AND ...
+$sql2 = "UPDATE records SET status = 'Grace Period' WHERE status = 'Overdue' AND stock &lt; 10";
+executeUpdate($conn, "Task 2: Status Update", $sql2);
+
+// Task 3: Bonus / Percentage Update with Upper Ceiling Cap
+$sql3 = "UPDATE records SET price = price * 1.10 WHERE price &gt; 400 AND (price * 1.10) &lt;= 1000";
+executeUpdate($conn, "Task 3: Price +10% with Cap", $sql3);
+
+// Task 4: Advanced SELECT with Sorting or Category Average Subquery
+$sql4 = "SELECT name, category, price, 
+         CASE WHEN price &gt; (SELECT AVG(price) FROM records r2 WHERE r2.category = r1.category) 
+              THEN 'Top Seller' ELSE 'Regular Seller' END AS seller_status 
+         FROM records r1 ORDER BY price DESC";
+showQuery($conn, "Task 4: Category Average Comparison", $sql4);
+
+// Single Value: Total Net Worth
+$resNet = $conn-&gt;query("SELECT SUM(price * stock) AS net_worth FROM records");
+$rowNet = $resNet-&gt;fetch_assoc();
+echo "&lt;p&gt;&lt;b&gt;Net Worth: &lt;/b&gt;" . number_format($rowNet['net_worth'], 2) . " BDT&lt;/p&gt;";
+
+$conn-&gt;close();
+?&gt;</code></pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT COLUMN: QUESTION WORDING TO SQL DICTIONARY & ADVANCED PATTERNS -->
+    <div class="col">
+      <!-- QUESTION WORDING TO SQL MAPPING DICTIONARY -->
+      <div class="card">
+        <div class="card-header bg-slate">
+          <span>EXAM QUESTION WORDING &rarr; SQL COMMAND DICTIONARY</span>
+        </div>
+        <div class="card-body">
+          <table>
+            <tr><th>When Question Asks:</th><th>SQL Command to Write:</th></tr>
+            <tr><td><b>"Show / Display / Find / List"</b></td><td><code>SELECT col1, col2 FROM table</code></td></tr>
+            <tr><td><b>"For each category / department / region"</b></td><td><code>GROUP BY CategoryName</code> (must appear in SELECT too)</td></tr>
+            <tr><td><b>"Total number of ... in each ..."</b></td><td><code>SELECT col, COUNT(*) AS total FROM t GROUP BY col</code></td></tr>
+            <tr><td><b>"Only include groups having more than N / avg &gt; X"</b></td><td><code>HAVING COUNT(*) &gt; N</code> or <code>HAVING AVG(rating) &gt; 4.4</code></td></tr>
+            <tr><td><b>"Sorted largest first / highest to lowest"</b></td><td><code>ORDER BY col_name DESC</code></td></tr>
+            <tr><td><b>"Sorted smallest first / ascending"</b></td><td><code>ORDER BY col_name ASC</code></td></tr>
+            <tr><td><b>"Name contains word 'Beach' or 'Forest'"</b></td><td><code>WHERE name LIKE '%Beach%'</code></td></tr>
+            <tr><td><b>"Rating between 4.0 and 4.5 (inclusive)"</b></td><td><code>WHERE rating BETWEEN 4.0 AND 4.5</code></td></tr>
+            <tr><td><b>"If salary &lt; 40,000 and rating != 'D', change to 'C'"</b></td><td><code>UPDATE t SET rating='C' WHERE salary &lt; 40000 AND rating &lt;&gt; 'D'</code></td></tr>
+            <tr><td><b>"Add 5,000 bonus, only if resulting &le; 60,000"</b></td><td><code>UPDATE t SET sal = sal + 5000 WHERE sal &gt; 50000 AND (sal + 5000) &le; 60000</code></td></tr>
+            <tr><td><b>"Add 10% bonus revenue / Increase by 10%"</b></td><td><code>UPDATE t SET rev = rev * 1.10 WHERE rev &gt; 70000</code></td></tr>
+            <tr><td><b>"Reduce price by 10% / 10% discount"</b></td><td><code>UPDATE t SET price = price * 0.90 WHERE category = 'Language'</code></td></tr>
+            <tr><td><b>"Total estimated revenue: sum of fee &times; visitors"</b></td><td><code>SELECT region, SUM(fee * visitors) AS rev FROM t GROUP BY region</code></td></tr>
+            <tr><td><b>"Total net worth of entire bookshop"</b></td><td><code>SELECT SUM(price * stock) AS total_worth FROM book_info</code></td></tr>
+            <tr><td><b>"Label 'Top Seller' if above own category avg"</b></td><td><code>CASE WHEN price &gt; (SELECT AVG(price) FROM t t2 WHERE t2.cat = t1.cat) THEN 'Top Seller' ELSE 'Regular' END</code></td></tr>
+            <tr><td><b>"Change two columns at once"</b></td><td><code>UPDATE t SET status='Grace Period', fee=0.00 WHERE status='Overdue' AND days &lt; 7</code></td></tr>
+          </table>
+        </div>
+      </div>
+
+      <!-- CRITICAL EXAM TRAPS & XAMPP QUICK FIXES -->
+      <div class="card">
+        <div class="card-header bg-amber">
+          <span>CRITICAL EXAM RULES & ZERO-CRASH CHECKS</span>
+        </div>
+        <div class="card-body">
+          <ul style="padding-left: 10px; font-size: 6.5pt; line-height: 1.35;">
+            <li><span class="warn">TRAP 1:</span> Never use <code>WHERE COUNT(*) &gt; 1</code> or <code>WHERE AVG(x) &gt; 4</code>! Aggregates MUST go in <code>HAVING</code> after <code>GROUP BY</code>.</li>
+            <li><span class="warn">TRAP 2:</span> Always run tasks in the <b>exact order listed</b>! Earlier <code>UPDATE</code> queries change rows for subsequent <code>SELECT</code> queries.</li>
+            <li><span class="warn">TRAP 3:</span> Double check column spelling! Case sensitivity in SQL depends on OS. Use exact names from the exam sheet.</li>
+            <li><span class="warn">TRAP 4:</span> In XAMPP, open PHP files via <code>http://localhost/web_final/...</code> (never double-click the file, or you get raw PHP text).</li>
+            <li><span class="warn">TRAP 5:</span> Blank white page in PHP? You missed a semicolon <code>;</code> or closing quote/bracket. Open <code>php.ini</code> display_errors or check syntax.</li>
+            <li><span class="warn">TRAP 6:</span> JS button does nothing? Press <code>F12</code> &rarr; Console. Ensure HTML input <code>id</code> matches <code>document.getElementById()</code>.</li>
+            <li><span class="warn">ZIP & SUBMIT:</span> 5 minutes before deadline, stop editing, zip <code>web_final</code>, and upload to eLMS!</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
