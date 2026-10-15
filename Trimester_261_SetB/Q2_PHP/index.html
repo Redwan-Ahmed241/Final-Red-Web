@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>UIU Mars Rover Battery Calculator</title>
+</head>
+<body>
+    <h2>UIU Mars Rover Battery Module Calculator</h2>
+
+    <form action="calculate.php" method="POST">
+        <label for="distance">Mission Distance (meters):</label><br>
+        <input type="number" id="distance" name="distance" required><br><br>
+
+        <label for="energy_per_meter">Energy Consumption per Meter:</label><br>
+        <input type="number" id="energy_per_meter" name="energy_per_meter" required><br><br>
+
+        <label for="battery_capacity">Capacity of One Battery Module:</label><br>
+        <input type="number" id="battery_capacity" name="battery_capacity" required><br><br>
+
+        <input type="submit" value="Calculate Battery Requirements">
+    </form>
+</body>
+</html>

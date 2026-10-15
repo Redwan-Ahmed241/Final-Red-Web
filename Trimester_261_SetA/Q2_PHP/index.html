@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Student Academic Tracking System</title>
+</head>
+<body>
+    <h2>Student Academic Tracking System</h2>
+
+    <form action="calculate.php" method="POST">
+        <label for="credits_per_course">Credits Earned Per Course:</label><br>
+        <input type="number" id="credits_per_course" name="credits_per_course" required><br><br>
+
+        <label for="courses_completed">Number of Courses Completed:</label><br>
+        <input type="number" id="courses_completed" name="courses_completed" required><br><br>
+
+        <label for="target_credits">Target Graduation Credits:</label><br>
+        <input type="number" id="target_credits" name="target_credits" required><br><br>
+
+        <input type="submit" value="Calculate Academic Progress">
+    </form>
+</body>
+</html>

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>UIU Tech Fest Venue Budget Calculator</title>
+</head>
+<body>
+    <h2>UIU Tech Fest Venue Budget Calculator</h2>
+
+    <form action="calculate.php" method="POST">
+        <label for="attendees">Expected Attendees:</label><br>
+        <input type="number" id="attendees" name="attendees" required><br><br>
+
+        <label for="cost_per_person">Cost per Person (BDT):</label><br>
+        <input type="number" id="cost_per_person" name="cost_per_person" required><br><br>
+
+        <label for="venue_capacity">Maximum Venue Capacity:</label><br>
+        <input type="number" id="venue_capacity" name="venue_capacity" required><br><br>
+
+        <input type="submit" value="Calculate Budget">
+    </form>
+</body>
+</html>

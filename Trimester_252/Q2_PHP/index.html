@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Movie Night Event Manager</title>
+</head>
+<body>
+    <h2>Movie Night Screen Rental Calculator</h2>
+
+    <form action="calculate.php" method="POST">
+        <label for="attendees">Total Attendees:</label><br>
+        <input type="number" id="attendees" name="attendees" required><br><br>
+
+        <label for="capacity">Screen Seating Capacity:</label><br>
+        <input type="number" id="capacity" name="capacity" required><br><br>
+
+        <label for="ticket_price">Ticket Price per Seat (BDT):</label><br>
+        <input type="number" id="ticket_price" name="ticket_price" required><br><br>
+
+        <input type="submit" value="Calculate Screens & Waste">
+    </form>
+</body>
+</html>

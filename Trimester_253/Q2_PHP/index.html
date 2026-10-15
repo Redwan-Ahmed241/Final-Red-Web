@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Event-Planning Sales Performance System</title>
+</head>
+<body>
+    <h2>Event Sales Performance Tracker</h2>
+
+    <form action="calculate.php" method="POST">
+        <label for="items_per_day">Items Sold Per Day:</label><br>
+        <input type="number" id="items_per_day" name="items_per_day" required><br><br>
+
+        <label for="days">Number of Days Sale Runs:</label><br>
+        <input type="number" id="days" name="days" required><br><br>
+
+        <label for="target">Target Number of Items:</label><br>
+        <input type="number" id="target" name="target" required><br><br>
+
+        <input type="submit" value="Evaluate Sales Performance">
+    </form>
+</body>
+</html>

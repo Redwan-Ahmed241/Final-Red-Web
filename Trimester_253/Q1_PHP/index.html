@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Student Marks Processing System</title>
+</head>
+<body>
+    <h2>Student CT and Exam Marks Processor</h2>
+
+    <form action="calculate.php" method="POST">
+        <label for="ct1">Class Test 1 (CT 1):</label><br>
+        <input type="number" step="0.1" id="ct1" name="ct1" required><br><br>
+
+        <label for="ct2">Class Test 2 (CT 2):</label><br>
+        <input type="number" step="0.1" id="ct2" name="ct2" required><br><br>
+
+        <label for="ct3">Class Test 3 (CT 3):</label><br>
+        <input type="number" step="0.1" id="ct3" name="ct3" required><br><br>
+
+        <label for="midterm">Midterm Exam Mark:</label><br>
+        <input type="number" step="0.1" id="midterm" name="midterm" required><br><br>
+
+        <label for="final">Final Exam Mark:</label><br>
+        <input type="number" step="0.1" id="final" name="final" required><br><br>
+
+        <input type="submit" value="Calculate Marks">
+    </form>
+</body>
+</html>
