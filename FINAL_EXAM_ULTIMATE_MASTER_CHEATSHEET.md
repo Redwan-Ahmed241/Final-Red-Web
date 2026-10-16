@@ -21,7 +21,73 @@
     <script src="script.js"></script>
 </body>
 </html>
+---
+
+### All Input Controls & DOM Reading Rules (Dropdown, Radio, Checkbox, Textarea)
+```html
+<!-- 1. Text & Number Inputs -->
+<input type="text" id="a" placeholder="Subject / Meal">
+<input type="number" id="b" placeholder="Hours / Calories">
+
+<!-- 2. Dropdown (<select>) -->
+<select id="loc">
+    <option value="">Select Location</option>
+    <option value="Dhaka">Dhaka</option>
+    <option value="Chittagong">Chittagong</option>
+</select>
+
+<!-- 3. Radio Buttons (Give both the SAME name="area" so only ONE can be selected!) -->
+<input type="radio" name="area" id="urb" value="Urban"> Urban
+<input type="radio" name="area" id="rur" value="Rural"> Rural
+
+<!-- 4. Checkbox -->
+<input type="checkbox" id="chk" value="yes"> I agree
+
+<!-- 5. Textarea -->
+<textarea id="msg" placeholder="Comments"></textarea>
+
+<!-- Button, Output & Script -->
+<button id="btn" onclick="add()">Submit</button>
+<div id="res"></div>
+<script src="script.js"></script>
 ```
+
+#### How to Read Each Input in JavaScript:
+```javascript
+// Text & Number:
+let subject = document.getElementById("a").value;
+let hours   = Number(document.getElementById("b").value);
+
+// Dropdown (<select>):
+let location = document.getElementById("loc").value;
+
+// Radio Buttons (.checked returns true or false):
+let isUrban = document.getElementById("urb").checked;
+let isRural = document.getElementById("rur").checked;
+
+// Checkbox (.checked returns true or false):
+let isAgreed = document.getElementById("chk").checked;
+
+// Textarea:
+let comments = document.getElementById("msg").value;
+
+// Read text from normal div / span / h3:
+let divText = document.getElementById("res").textContent; // or .innerText
+
+// Disable a button / input:
+document.getElementById("btn").disabled = true;
+
+// Change style / color dynamically:
+document.getElementById("res").style.color = (total >= 100) ? "green" : "red";
+
+// Clear an input box:
+document.getElementById("a").value = "";
+```
+
+> [!IMPORTANT]
+> **Core DOM Rule:**  
+> For input controls (`<input>`, `<select>`, `<textarea>`), you **NEVER** use `.innerHTML`. You use **`.value`** (or **`.checked`** for radio/checkbox).  
+> For display tags (`<div>`, `<p>`, `<span>`, `<h3>`, `<td>`), you use **`.innerHTML`** or **`.textContent`**!
 
 ---
 
@@ -199,13 +265,52 @@ actionBtn.addEventListener("click", evaluateVitals);
 | **Array Output** | `arr.join(", ")` or `` `[${arr.join(", ")}]` `` | Calling `el.innerHTML = ...` multiple times overwrites itself. Assign once! |
 | **Math Rounding** | `val.toFixed(2)` | `toFixed()` returns a **string**. Wrap in `parseFloat()` if math needed. |
 | **Regex Test** | `/[A-Z]/.test(str)` | Returns `true` or `false`. |
-| **Absolute Value** | `Math.abs(a - b)` | Used for difference from baseline. |
+---
+
+### JS Objects, JSON Conversion, Array Methods & Random Numbers
+```javascript
+// 1. JavaScript Objects:
+let student = {
+    name: "Swaron",
+    id: "0112230418",
+    cgpa: 3.63
+};
+// Properties can be accessed in 2 ways:
+let sName = student.name;
+let sId   = student["id"];
+
+// 2. JSON Conversion:
+// Convert JS Object -> JSON String (for sending over network / storing)
+let jsonString = JSON.stringify(student);
+
+// Convert JSON String -> Back to JS Object
+let parsedStudent = JSON.parse(jsonString);
+console.log(parsedStudent.name, parsedStudent.cgpa);
+
+// 3. Array STL Methods:
+let arr = ["Apple", "Banana"];
+arr.push("Mango");      // Adds to end
+arr.pop();              // Removes from end
+arr.unshift("Orange");  // Adds to beginning
+arr.shift();            // Removes from beginning
+arr.includes("Apple");  // Returns true / false
+arr.indexOf("Banana");  // Returns index or -1
+arr.sort();             // Sorts alphabetically / numerically
+arr.reverse();          // Reverses array
+arr.join(", ");         // Converts to string: "Orange, Apple, Banana"
+arr.length;             // Total count of elements
+
+// 4. Random Integer Generator (Between min and max inclusive):
+// e.g. Dice roll between 1 and 6:
+let min = 1, max = 6;
+let randInt = Math.floor(Math.random() * (max - min + 1)) + min;
+```
 
 ---
 
 ## Part 2: Question 2 — PHP Form Processing & Business Logic (10 Marks)
 
-### Minimal HTML Form (`index.html` — No Extra Labels, Just Names)
+### Minimal HTML Form (`index.html` — Includes Dropdown, Radio & Checkbox)
 ```html
 <!DOCTYPE html>
 <html>
@@ -215,10 +320,59 @@ actionBtn.addEventListener("click", evaluateVitals);
         <input type="number" name="a" placeholder="First Input" step="any"><br><br>
         <input type="number" name="b" placeholder="Second Input" step="any"><br><br>
         <input type="number" name="c" placeholder="Third Input" step="any"><br><br>
+
+        <!-- Dropdown in PHP Form -->
+        <select name="category">
+            <option value="Tech">Tech</option>
+            <option value="Furniture">Furniture</option>
+        </select><br><br>
+
+        <!-- Radio Buttons in PHP Form -->
+        <input type="radio" name="area" value="Urban" checked> Urban
+        <input type="radio" name="area" value="Rural"> Rural<br><br>
+
+        <!-- Checkbox in PHP Form -->
+        <input type="checkbox" name="discount" value="yes"> Apply Discount<br><br>
+
         <button type="submit">Calculate</button>
     </form>
 </body>
 </html>
+```
+
+#### How PHP Reads Each Form Input (`calculate.php`):
+```php
+<?php
+// Numbers & Text:
+$num1 = floatval($_POST['a']);
+$num2 = floatval($_POST['b']);
+
+// Dropdown (<select>):
+$cat = $_POST['category'];
+
+// Radio Buttons (receives the value of the checked radio):
+$area = $_POST['area']; // "Urban" or "Rural"
+
+// Checkbox (Check with isset()! If unticked, browser doesn't send it at all):
+$hasDiscount = isset($_POST['discount']); // true if ticked, false if unticked
+
+// PHP Arrays & Loops:
+$fruits = ["Apple", "Banana", "Mango", "Orange"];
+// Loop with for:
+for ($i = 0; $i < count($fruits); $i++) {
+    echo $fruits[$i] . "<br>";
+}
+// Loop with foreach:
+foreach ($fruits as $fruit) {
+    echo $fruit . "<br>";
+}
+
+// PHP Useful Math:
+// ceil($a / $b)   -> Always rounds UP (crucial for capacity allocation!)
+// min($a, $b, $c) -> Minimum of numbers
+// max($a, $b, $c) -> Maximum of numbers
+// (int)($a / $b)  -> Integer division (discards decimal without rounding)
+// abs($a - $b)    -> Absolute positive difference
 ```
 
 ---

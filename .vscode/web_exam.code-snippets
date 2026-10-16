@@ -290,5 +290,66 @@
       "UPDATE ${2:items} SET ${7:Rating} = ${7:Rating} + 0.2, ${3:Price} = ${3:Price} * 1.10 WHERE ${7:Rating} BETWEEN 4.0 AND 4.5 AND ${3:Price} > 0;"
     ],
     "description": "All 15 SQL query archetypes from past exam papers (Trimesters 242 to 261)"
+  },
+  "Exam Form Inputs (Dropdown, Radio, Checkbox)": {
+    "prefix": "examinputs",
+    "body": [
+      "<!-- Dropdown -->",
+      "<select id=\"${1:loc}\" name=\"${1:loc}\">",
+      "    <option value=\"\">Select</option>",
+      "    <option value=\"${2:Dhaka}\">${2:Dhaka}</option>",
+      "</select>",
+      "",
+      "<!-- Radio Buttons (Same name) -->",
+      "<input type=\"radio\" name=\"${3:area}\" id=\"${4:urb}\" value=\"${5:Urban}\" checked> ${5:Urban}",
+      "<input type=\"radio\" name=\"${3:area}\" id=\"${6:rur}\" value=\"${7:Rural}\"> ${7:Rural}",
+      "",
+      "<!-- Checkbox -->",
+      "<input type=\"checkbox\" id=\"${8:chk}\" name=\"${8:chk}\" value=\"yes\"> Agree",
+      "",
+      "<!-- Reading in JS: -->",
+      "// let loc = document.getElementById(\"${1:loc}\").value;",
+      "// let isChecked = document.getElementById(\"${4:urb}\").checked; // returns true/false",
+      "// let chk = document.getElementById(\"${8:chk}\").checked;",
+      "// document.getElementById(\"${9:btn}\").disabled = true;"
+    ],
+    "description": "Dropdown, Radio, and Checkbox HTML controls with JS reading"
+  },
+  "Exam JS Object & JSON": {
+    "prefix": "examjson",
+    "body": [
+      "let ${1:student} = {",
+      "    name: \"${2:Swaron}\",",
+      "    id: \"${3:0112230418}\",",
+      "    cgpa: ${4:3.63}",
+      "};",
+      "",
+      "// Convert JS Object -> JSON String",
+      "let jsonStr = JSON.stringify(${1:student});",
+      "",
+      "// Convert JSON String -> Back to JS Object",
+      "let parsed = JSON.parse(jsonStr);",
+      "console.log(parsed.name, parsed.cgpa);"
+    ],
+    "description": "JavaScript object definition and JSON.stringify / JSON.parse conversion"
+  },
+  "Exam Random Integer": {
+    "prefix": "examrand",
+    "body": [
+      "let min = ${1:1}, max = ${2:6};",
+      "let randInt = Math.floor(Math.random() * (max - min + 1)) + min;"
+    ],
+    "description": "Generate random integer between min and max inclusive"
+  },
+  "Exam PHP Array & Loop": {
+    "prefix": "examphploop",
+    "body": [
+      "\\$items = [\"${1:Apple}\", \"${2:Banana}\", \"${3:Mango}\"];",
+      "for (\\$i = 0; \\$i < count(\\$items); \\$i++) {",
+      "    echo \\$items[\\$i] . \"<br>\";",
+      "}"
+    ],
+    "description": "PHP array and loop print"
   }
 }
+

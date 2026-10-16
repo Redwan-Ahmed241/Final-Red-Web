@@ -241,3 +241,50 @@ UPDATE items SET Price = Price * 0.90 WHERE Category = 'Furniture';
 -- 15. Update 2 columns at once (261)
 UPDATE items SET Rating = Rating + 0.2, Price = Price * 1.10 WHERE Rating BETWEEN 4.0 AND 4.5 AND Price > 0;
 */
+
+
+=== SNIPPET 10: ALL FORM INPUTS (DROPDOWN, RADIO, CHECKBOX) (PREFIX: examinputs) ===
+<!-- HTML Input Controls -->
+<select id="loc" name="loc">
+    <option value="">Select</option>
+    <option value="Dhaka">Dhaka</option>
+</select>
+
+<input type="radio" name="area" id="urb" value="Urban" checked> Urban
+<input type="radio" name="area" id="rur" value="Rural"> Rural
+
+<input type="checkbox" id="chk" name="chk" value="yes"> Agree
+
+<!-- JS Reading: -->
+let loc = document.getElementById("loc").value;
+let isUrban = document.getElementById("urb").checked; // returns true/false
+let isAgreed = document.getElementById("chk").checked;
+document.getElementById("btn").disabled = true;
+
+
+=== SNIPPET 11: JS OBJECT & JSON CONVERSION (PREFIX: examjson) ===
+let student = {
+    name: "Swaron",
+    id: "0112230418",
+    cgpa: 3.63
+};
+
+// Object -> JSON String
+let jsonStr = JSON.stringify(student);
+
+// JSON String -> Back to Object
+let obj = JSON.parse(jsonStr);
+console.log(obj.name, obj.cgpa);
+
+
+=== SNIPPET 12: RANDOM INTEGER GENERATOR (PREFIX: examrand) ===
+let min = 1, max = 6;
+let randInt = Math.floor(Math.random() * (max - min + 1)) + min;
+
+
+=== SNIPPET 13: PHP ARRAY & LOOP (PREFIX: examphploop) ===
+$items = ["Apple", "Banana", "Mango"];
+for ($i = 0; $i < count($items); $i++) {
+    echo $items[$i] . "<br>";
+}
+
