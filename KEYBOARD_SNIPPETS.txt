@@ -1,408 +1,200 @@
 === SNIPPET 1: JAVASCRIPT STATE TRACKER (PREFIX: examjs) ===
 
-const GOAL = 2000;
-let total = 0;
-let count = 0;
-const items = [];
+let total = 0, count = 0;
+let items = ""; // String tracking (no array needed!)
+// Or using array: const list = [];
 
-const inputName = document.getElementById("itemName");
-const inputValue = document.getElementById("itemValue");
-const actionBtn = document.getElementById("actionBtn");
-const outputLabel = document.getElementById("outputLabel");
-
-function processEntry() {
-    const name = inputName ? inputName.value.trim() : "";
-    const val = parseFloat(inputValue.value);
-
-    if (isNaN(val) || val <= 0) {
-        alert("Please enter a valid positive number.");
-        return;
-    }
+function add() {
+    let name = document.getElementById("a").value;
+    let val = Number(document.getElementById("b").value);
+    if (!name || isNaN(val) || val <= 0) return alert("Invalid input");
 
     count++;
     total += val;
-    if (name) items.push(name);
+    items += name + ", "; // Just like count++! (Or: list.push(name);)
 
-    const average = total / count;
-    let feedback = "";
+    let avg = total / count;
+    let msg = "";
 
-    if (total <= 800) {
-        feedback = "Initial progress, keep going!";
-    } else if (total <= 1600) {
-        feedback = "Good progress, staying balanced!";
-    } else if (total < GOAL) {
-        feedback = "Almost at the target!";
-    } else {
-        feedback = "Goal reached successfully!";
-    }
+    if (total <= 5)       msg = "Start studying regularly!";
+    else if (total <= 12) msg = "Good progress!";
+    else if (total <= 19) msg = "Almost ready!";
+    else                  msg = "Goal reached!";
 
-    if (count > 8 && total < GOAL) {
-        feedback += " Warning: Too many entries without reaching goal!";
-    }
+    if (count > 7 && total < 20) msg = "Increase study time!";
 
-    // Format string array for display
-    const itemsFormatted = items.length > 0 ? `[${items.join(", ")}]` : "[]";
-    outputLabel.innerHTML = `Total: ${total} | Average: ${parseFloat(average.toFixed(2))} | Items: ${itemsFormatted} | Feedback: <b>${feedback}</b>`;
+    // Simple line-by-line output:
+    document.getElementById("res").innerHTML = 
+        "Total: " + total + "<br>" +
+        "Average: " + avg.toFixed(2) + "<br>" +
+        "Subjects: [" + items.slice(0, -2) + "]<br>" +
+        "Status: " + msg;
 
-    if (inputName) inputName.value = "";
-    inputValue.value = "";
-    inputValue.focus();
+    document.getElementById("a").value = "";
+    document.getElementById("b").value = "";
 }
 
-actionBtn.addEventListener("click", processEntry);
 
-
-=== CHEAT SHEET: JAVASCRIPT STRING ARRAYS & DOM OUTPUT ===
-/*
-1. DECLARE OUTSIDE FUNCTION:
-   const items = []; // Must be outside so it doesn't reset on every click!
-
-2. PUSH STRINGS INSIDE FUNCTION:
-   const str = document.getElementById("nameInput").value.trim();
-   if (str) items.push(str);
-
-3. PREVENT DUPLICATES (IF REQUIRED):
-   if (!items.includes(str)) items.push(str);
-
-4. DISPLAY FORMATS:
-   - Bracketed list: `[${items.join(", ")}]`  -->  [English, Bangla, Math]
-   - Plain comma list: items.join(", ")      -->  English, Bangla, Math
-   - HTML bullet list: items.map(i => `<li>${i}</li>`).join("")
-
-5. THE INNERHTML OVERWRITE TRAP:
-   ❌ WRONG:
-      label.innerHTML = "Total: " + total;
-      label.innerHTML = "Items: " + items; // Wipes out total!
-      label.innerHTML = feedback;          // Wipes out items!
-   ✅ CORRECT:
-      Build one combined string and assign ONCE:
-      label.innerHTML = `Total: ${total} | Items: [${items.join(", ")}] | ${feedback}`;
-*/
-
-
-=== SNIPPET 2: JAVASCRIPT FORMULA & ARRAYS (PREFIX: examjsformula) ===
-
-const readingsA = [];
-const readingsB = [];
-
-const inputA = document.getElementById("inputA");
-const inputB = document.getElementById("inputB");
-const calculateBtn = document.getElementById("calculateBtn");
-const resultLabel = document.getElementById("resultLabel");
-
-function evaluateFormula() {
-    const valA = parseFloat(inputA.value);
-    const valB = parseFloat(inputB.value);
-
-    if (isNaN(valA) || isNaN(valB)) {
-        alert("Invalid input");
-        return;
-    }
-
-    readingsA.push(valA);
-    readingsB.push(valB);
-
-    const avgA = readingsA.reduce((sum, n) => sum + n, 0) / readingsA.length;
-    const avgB = readingsB.reduce((sum, n) => sum + n, 0) / readingsB.length;
-
-    const score = (100 - valB) * 2 + Math.abs(valA - 80) * 0.5;
-
-    let status = "";
-    if (score <= 10) {
-        status = "SAFE";
-    } else if (score <= 20) {
-        status = "WARNING";
-    } else {
-        status = "DANGER";
-    }
-
-    resultLabel.textContent = `Average A: ${avgA.toFixed(2)} | Average B: ${avgB.toFixed(2)} | Score: ${score.toFixed(1)} | Status: ${status}`;
-    inputA.value = "";
-    inputB.value = "";
-}
-
-calculateBtn.addEventListener("click", evaluateFormula);
-
-
-=== SNIPPET 3: HTML 3-INPUT FORM (PREFIX: examhtmlform) ===
+=== SNIPPET 2: JAVASCRIPT MINIMAL HTML (PREFIX: examjshtml) ===
 
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Calculation System</title>
-</head>
+<html>
 <body>
-    <h2>Calculation System</h2>
+    <h2>Tracker</h2>
+    <input type="text" id="a" placeholder="Subject / Meal"><br><br>
+    <input type="number" id="b" placeholder="Hours / Calories"><br><br>
+    <button onclick="add()">Submit</button>
+    <div id="res"></div>
+    <script src="script.js"></script>
+</body>
+</html>
+
+
+=== SNIPPET 3: HTML 3-INPUT FORM FOR PHP (PREFIX: examhtmlform) ===
+
+<!DOCTYPE html>
+<html>
+<body>
+    <h2>Calculation Form</h2>
     <form action="calculate.php" method="POST">
-        <label for="val1">Input 1:</label><br>
-        <input type="number" id="val1" name="val1" step="any" required><br><br>
-
-        <label for="val2">Input 2:</label><br>
-        <input type="number" id="val2" name="val2" step="any" required><br><br>
-
-        <label for="val3">Input 3:</label><br>
-        <input type="number" id="val3" name="val3" step="any" required><br><br>
-
-        <input type="submit" value="Calculate">
+        <input type="number" name="a" placeholder="Input 1" step="any"><br><br>
+        <input type="number" name="b" placeholder="Input 2" step="any"><br><br>
+        <input type="number" name="c" placeholder="Input 3" step="any"><br><br>
+        <button type="submit">Calculate</button>
     </form>
 </body>
 </html>
 
 
-=== SNIPPET 4: PHP CEIL, UNUSED & CLASSIFICATION (PREFIX: examphpcalc) ===
+=== SNIPPET 4: PHP CEIL ALLOCATION (PREFIX: examphpcalc) ===
 
 <?php
-function computeLogistics($demand, $rate, $capacity) {
-    $unitsNeeded = ceil($demand / $capacity);
-    $totalCapacity = $unitsNeeded * $capacity;
-    $unused = $totalCapacity - $demand;
-    $wastedCost = $unused * $rate;
-    $unusedPercentage = ($totalCapacity > 0) ? ($unused / $totalCapacity) * 100 : 0;
+$demand   = floatval($_POST['a']);
+$rate     = floatval($_POST['b']);
+$capacity = floatval($_POST['c']);
 
-    $classification = "";
-    if ($unusedPercentage <= 10) {
-        $classification = "Efficient";
-    } elseif ($unusedPercentage <= 25) {
-        $classification = "Acceptable";
-    } else {
-        $classification = "Wasteful";
-    }
+$unitsNeeded = ceil($demand / $capacity);
+$totalCap    = $unitsNeeded * $capacity;
+$empty       = $totalCap - $demand;
+$wastedCost  = $empty * $rate;
 
-    return [
-        'units' => $unitsNeeded,
-        'unused' => $unused,
-        'wastedCost' => $wastedCost,
-        'classification' => $classification
-    ];
-}
+$unusedPct = ($totalCap > 0) ? ($empty / $totalCap) * 100 : 0;
+$status = ($unusedPct <= 10) ? "Efficient" : (($unusedPct <= 25) ? "Acceptable" : "Wasteful");
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $val1 = floatval($_POST['val1']);
-    $val2 = floatval($_POST['val2']);
-    $val3 = floatval($_POST['val3']);
-
-    $res = computeLogistics($val1, $val2, $val3);
-
-    echo "<h2>Calculation Result</h2>";
-    echo "<table border='1' cellpadding='8'>";
-    echo "<tr><th>Demand</th><th>Rate</th><th>Capacity</th><th>Units Needed</th><th>Unused</th><th>Wasted Cost</th><th>Status</th></tr>";
-    echo "<tr>
-            <td>{$val1}</td>
-            <td>{$val2}</td>
-            <td>{$val3}</td>
-            <td>{$res['units']}</td>
-            <td>{$res['unused']}</td>
-            <td>" . number_format($res['wastedCost'], 2) . "</td>
-            <td>{$res['classification']}</td>
-          </tr>";
-    echo "</table>";
-    echo "<br><a href='index.html'>Back</a>";
-}
+echo "Units Needed: " . $unitsNeeded . "<br>";
+echo "Empty Slots: " . $empty . "<br>";
+echo "Wasted Cost: " . $wastedCost . " BDT<br>";
+echo "Status: " . $status;
 ?>
 
 
-=== SNIPPET 5: PHP TARGET PERFORMANCE COMPARISON (PREFIX: examphptarget) ===
+=== SNIPPET 5: PHP TARGET COMPARISON (PREFIX: examphptarget) ===
 
 <?php
-function evaluateTargetPerformance($ratePerDay, $days, $target) {
-    $total = $ratePerDay * $days;
+$val1   = floatval($_POST['cred']);
+$val2   = floatval($_POST['num_course']);
+$target = floatval($_POST['tar_cred']);
 
-    $category = "";
-    if ($total >= 500) {
-        $category = "Excellent";
-    } elseif ($total >= 300) {
-        $category = "Good";
-    } elseif ($total >= 150) {
-        $category = "Average";
-    } else {
-        $category = "Poor";
-    }
+$total = $val1 * $val2;
 
-    $diff = $total - $target;
-    $result = "";
-    if ($diff == 0) {
-        $result = "Target met exactly (0 difference)";
-    } elseif ($diff > 0) {
-        $result = "Above target by " . $diff;
-    } else {
-        $result = "Below target by " . abs($diff);
-    }
+// 4-Tier Categorization
+$cat = "Poor";
+if ($total >= 120)     $cat = "Excellent";
+elseif ($total >= 90)  $cat = "Good";
+elseif ($total >= 60)  $cat = "Average";
 
-    return ['total' => $total, 'category' => $category, 'result' => $result];
+// Target Comparison (Keep subtraction in parentheses!)
+if ($total == $target) {
+    $state = "Exactly at target (0 diff)";
+} elseif ($total > $target) {
+    $state = "Above target by " . ($total - $target);
+} else {
+    $state = "Below target by " . ($target - $total);
 }
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $r = floatval($_POST['val1']);
-    $d = floatval($_POST['val2']);
-    $t = floatval($_POST['val3']);
-
-    $data = evaluateTargetPerformance($r, $d, $t);
-
-    echo "<table border='1' cellpadding='8'>";
-    echo "<tr><th>Total Produced</th><th>Category</th><th>Result</th></tr>";
-    echo "<tr><td>{$data['total']}</td><td>{$data['category']}</td><td>{$data['result']}</td></tr>";
-    echo "</table>";
-}
+echo "Total credits: " . $total . "<br>";
+echo "Progress category: " . $cat . "<br>";
+echo "Target comparison: " . $state . "<br>";
 ?>
 
 
-=== SNIPPET 6: SQL SETUP (PREFIX: examsqlsetup) ===
+=== SNIPPET 6: PHP BEST 2 OF 3 CT MARKS (PREFIX: examphpbest2) ===
+
+<?php
+$c1 = floatval($_POST['ct1']);
+$c2 = floatval($_POST['ct2']);
+$c3 = floatval($_POST['ct3']);
+$m  = floatval($_POST['mid']);
+$f  = floatval($_POST['final']);
+
+$bestTwoAvg = (($c1 + $c2 + $c3) - min($c1, $c2, $c3)) / 2.0;
+$grandTotal = $bestTwoAvg + $m + $f;
+$status = ($grandTotal > 54) ? "Passed" : "Failed";
+
+echo "Best 2 CT Avg: " . $bestTwoAvg . "<br>";
+echo "Grand Total: " . $grandTotal . "<br>";
+echo "Status: " . $status;
+?>
+
+
+=== SNIPPET 7: SQL DATABASE SETUP (PREFIX: examsqlsetup) ===
 
 CREATE DATABASE IF NOT EXISTS exam_db;
 USE exam_db;
-
-DROP TABLE IF EXISTS records;
-CREATE TABLE records (
+DROP TABLE IF EXISTS items;
+CREATE TABLE items (
     id INT PRIMARY KEY,
-    title VARCHAR(100),
+    name VARCHAR(50),
     category VARCHAR(50),
-    price DECIMAL(10, 2),
+    price DOUBLE,
     stock INT,
-    rating DECIMAL(3, 1)
+    rating DOUBLE,
+    status VARCHAR(50)
 );
-
-INSERT INTO records (id, title, category, price, stock, rating) VALUES
-(1, 'Alpha Item', 'Tech', 450.00, 10, 4.8),
-(2, 'Beta Item', 'Tech', 850.00, 5, 4.2),
-(3, 'Gamma Item', 'Office', 250.00, 20, 3.9),
-(4, 'Delta Item', 'Office', 150.00, 15, 4.5),
-(5, 'Epsilon Item', 'General', 300.00, 8, 4.1);
+INSERT INTO items VALUES
+(1, 'Laptop', 'Tech', 50000, 5, 4.8, 'Active'),
+(2, 'Mouse', 'Tech', 500, 20, 4.2, 'Active'),
+(3, 'Chair', 'Furniture', 3000, 8, 4.5, 'Pending'),
+(4, 'Desk', 'Furniture', 7200, 6, 4.1, 'Active');
 
 
-=== SNIPPET 7: COMPLETE PHP MYSQL RUNNER (PREFIX: examphpmysql) ===
+=== SNIPPET 8: PHP MYSQL RUNNER WITH WHILE LOOP (PREFIX: examphpmysql) ===
 
 <?php
 $conn = new mysqli("localhost", "root", "", "exam_db");
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
+
+// Task 1: Category Summary with while loop
+echo "<h3>Task 1: Summary</h3>";
+$res1 = $conn->query("SELECT category, COUNT(*) AS total, AVG(price) AS avg_val FROM items GROUP BY category");
+while ($row = $res1->fetch_assoc()) {
+    echo $row['category'] . " - Total: " . $row['total'] . " - Avg: " . $row['avg_val'] . "<br>";
 }
 
-function displayTable($conn, $title, $sql) {
-    echo "<h3>" . htmlspecialchars($title) . "</h3>";
-    $result = $conn->query($sql);
-    if (!$result) {
-        echo "Error: " . $conn->error . "<br>";
-        return;
-    }
-    if ($result->num_rows > 0) {
-        echo "<table border='1' cellpadding='6'><tr>";
-        while ($field = $result->fetch_field()) {
-            echo "<th>" . htmlspecialchars($field->name) . "</th>";
-        }
-        echo "</tr>";
-        while ($row = $result->fetch_assoc()) {
-            echo "<tr>";
-            foreach ($row as $val) {
-                echo "<td>" . htmlspecialchars($val) . "</td>";
-            }
-            echo "</tr>";
-        }
-        echo "</table>";
-    } else {
-        echo "0 results found.<br>";
-    }
+// Task 2: Conditional UPDATE
+$conn->query("UPDATE items SET status = 'Discount' WHERE price < 1000 AND status <> 'Pending'");
+echo "Task 2 Updated!<br>";
+
+// Task 3: Bonus / Increment with Ceiling Cap
+$conn->query("UPDATE items SET price = price + 500 WHERE price > 300 AND (price + 500) <= 60000");
+echo "Task 3 Updated!<br>";
+
+// Task 4: Subquery / CASE WHEN with while loop
+echo "<h3>Task 4: High Value Items</h3>";
+$res4 = $conn->query("SELECT name, price FROM items WHERE price > (SELECT AVG(price) FROM items)");
+while ($row = $res4->fetch_assoc()) {
+    echo $row['name'] . ": " . $row['price'] . "<br>";
 }
 
-function executeUpdate($conn, $title, $sql) {
-    echo "<h3>" . htmlspecialchars($title) . "</h3>";
-    if ($conn->query($sql) === TRUE) {
-        echo "Updated successfully. Affected rows: " . $conn->affected_rows . "<br>";
-    } else {
-        echo "Update error: " . $conn->error . "<br>";
-    }
-}
-
-displayTable($conn, "Task 1: Category Summary", 
-    "SELECT category, COUNT(*) AS total_items, AVG(rating) AS avg_rating, SUM(price * stock) AS category_value FROM records GROUP BY category HAVING avg_rating > 4.0 ORDER BY avg_rating DESC");
-
-executeUpdate($conn, "Task 2: Conditional Status Update", 
-    "UPDATE records SET category = 'Discounted' WHERE price < 300 AND rating < 4.0");
-
-executeUpdate($conn, "Task 3: Percentage Increment with Upper Ceiling", 
-    "UPDATE records SET price = price * 1.10 WHERE price > 400 AND (price * 1.10) <= 1000.00");
-
-displayTable($conn, "Task 4: Item Classification Against Category Average", 
-    "SELECT t1.title, t1.category, t1.price, CASE WHEN t1.price > (SELECT AVG(t2.price) FROM records t2 WHERE t2.category = t1.category) THEN 'Premium Tier' ELSE 'Standard Tier' END AS item_tier FROM records t1 ORDER BY t1.price DESC");
-
-$singleResult = $conn->query("SELECT SUM(price * stock) AS total_net_worth FROM records");
-if ($singleResult && $row = $singleResult->fetch_assoc()) {
-    echo "<p><b>Total Value: " . number_format($row['total_net_worth'], 2) . "</b></p>";
-}
+// Total Net Worth (Single Value)
+$res5 = $conn->query("SELECT SUM(price * stock) AS net_worth FROM items");
+$row5 = $res5->fetch_assoc();
+echo "<b>Total: " . $row5['net_worth'] . "</b>";
 
 $conn->close();
 ?>
 
 
-=== SNIPPET 8: JAVASCRIPT PASSWORD STRENGTH & REGEX (PREFIX: examjspassword) ===
-
-let attempts = 0;
-const inputPassword = document.getElementById("passwordInput");
-const checkBtn = document.getElementById("checkBtn");
-const statusLabel = document.getElementById("statusLabel");
-
-function evaluatePassword() {
-    const p = inputPassword.value;
-    attempts++;
-    let score = 0;
-
-    // Length criteria
-    if (p.length >= 6) {
-        score += Math.floor((p.length - 6) / 2) * 10;
-    }
-
-    // Regex checks
-    if (/[A-Z]/.test(p)) score += 15;
-    if (/[a-z]/.test(p)) score += 15;
-    if (/[0-9]/.test(p)) score += 20;
-    if (/[!@#$%^&*]/.test(p)) score += 25;
-
-    // 5 Tiers
-    let lvl = (score <= 30) ? "Very Weak" : (score <= 50) ? "Weak" :
-              (score <= 70) ? "Medium" : (score <= 90) ? "Strong" : "Very Strong";
-
-    let msg = (score >= 100) ? "Perfect Password! Success!" : `Score: ${score} - ${lvl}`;
-
-    if (attempts > 8 && score < 71) {
-        msg += " | Need practice! Tips: Add uppercase, digits & symbols.";
-    }
-
-    statusLabel.innerHTML = msg;
-}
-
-checkBtn.addEventListener("click", evaluatePassword);
-
-
-=== SNIPPET 9: PHP BEST 2 OF 3 CT MARKS + PASS/FAIL (PREFIX: examphpbest2) ===
-
-<?php
-function processStudentMarks($ct1, $ct2, $ct3, $mid, $final) {
-    // Best 2 CTs: sum minus the lowest, divided by 2
-    $bestTwoAvg = (($ct1 + $ct2 + $ct3) - min($ct1, $ct2, $ct3)) / 2.0;
-    $grandTotal = $bestTwoAvg + $mid + $final;
-    $status = ($grandTotal > 54) ? "Passed" : "Failed";
-
-    return [
-        'bestAvg' => $bestTwoAvg,
-        'grandTotal' => $grandTotal,
-        'status' => $status
-    ];
-}
-
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $c1 = floatval($_POST['ct1']);
-    $c2 = floatval($_POST['ct2']);
-    $c3 = floatval($_POST['ct3']);
-    $m  = floatval($_POST['mid']);
-    $f  = floatval($_POST['final']);
-
-    $res = processStudentMarks($c1, $c2, $c3, $m, $f);
-    echo "Best 2 CT Avg: {$res['bestAvg']} | Total: {$res['grandTotal']} | Status: <b>{$res['status']}</b>";
-}
-?>
-
-
-=== SNIPPET 10: ALL 15 SQL QUERY ARCHETYPES (PREFIX: examsqlqueries) ===
+=== SNIPPET 9: ALL 15 SQL QUERY ARCHETYPES (PREFIX: examsqlqueries) ===
 /*
 -- 1. Count rows per group (243, 251, 253, 261)
 SELECT Category, COUNT(*) AS Total FROM items GROUP BY Category;
@@ -449,4 +241,3 @@ UPDATE items SET Price = Price * 0.90 WHERE Category = 'Furniture';
 -- 15. Update 2 columns at once (261)
 UPDATE items SET Rating = Rating + 0.2, Price = Price * 1.10 WHERE Rating BETWEEN 4.0 AND 4.5 AND Price > 0;
 */
-

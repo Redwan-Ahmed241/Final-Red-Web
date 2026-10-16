@@ -8,24 +8,16 @@
 
 ## Part 1: Question 1 — JavaScript & DOM (10 Marks)
 
-### Universal HTML Architecture (`index.html`)
+### Minimal HTML Architecture (`index.html`)
 ```html
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Exam Application</title>
-</head>
+<html>
 <body>
-    <h2>Exam Application</h2>
-    <input type="text" id="inputA" placeholder="Name / Subject / Password">
-    <input type="number" id="inputB" step="any" placeholder="Value / Hours / Score">
-
-    <button id="actionBtn" type="button">Submit / Calculate</button>
-    <br><br>
-    
-    <label id="outLabel"></label>
-
+    <h2>Tracker</h2>
+    <input type="text" id="a" placeholder="Subject / Meal"><br><br>
+    <input type="number" id="b" placeholder="Hours / Calories"><br><br>
+    <button onclick="add()">Submit</button>
+    <div id="res"></div>
     <script src="script.js"></script>
 </body>
 </html>
@@ -33,66 +25,72 @@
 
 ---
 
-### Type 1A: Running Total, String Array & Goal Progress Tracker
-*Common in: Trimester 252 (Daily Calories), Trimester 261 Set A (Weekly Study Tracker)*
+### Minimal JavaScript State Tracker (`script.js`)
+*You can track strings in TWO simple ways:*
 
+#### Way A: Simple String Accumulator (No Array Needed! Just like `total += val`):
 ```javascript
-const GOAL = 20; // 2000 kcal or 20 hours
-let total = 0;
-let count = 0;
-const historyList = []; // Declared OUTSIDE function so it persists across clicks
+let total = 0, count = 0;
+let items = ""; // String accumulator!
 
-const inputA = document.getElementById("inputA");
-const inputB = document.getElementById("inputB");
-const actionBtn = document.getElementById("actionBtn");
-const outLabel = document.getElementById("outLabel");
+function add() {
+    let name = document.getElementById("a").value;
+    let val = Number(document.getElementById("b").value);
+    if (!name || isNaN(val) || val <= 0) return alert("Invalid input");
 
-function handleAction() {
-    const name = inputA.value.trim();
-    const val = parseFloat(inputB.value);
-
-    // 1. Validation
-    if (!name || isNaN(val) || val <= 0) {
-        alert("Please enter a valid name and positive value.");
-        return;
-    }
-
-    // 2. State update
     count++;
     total += val;
-    historyList.push(name); // To avoid duplicates: if (!historyList.includes(name)) historyList.push(name);
+    items += name + ", "; // Adds to string just like count++!
 
-    // 3. Average calculation
-    const avg = total / count;
+    let avg = total / count;
+    let msg = "";
 
-    // 4. 4-Tier Feedback Ladder (Use <= chained to prevent gaps)
-    let feedback = "";
-    if (total <= 5) {
-        feedback = "Start practicing regularly!";
-    } else if (total <= 12) {
-        feedback = "Good progress!";
-    } else if (total <= 19) {
-        feedback = "Almost ready!";
-    } else {
-        feedback = "Goal reached successfully!";
-    }
+    if (total <= 5)       msg = "Start studying regularly!";
+    else if (total <= 12) msg = "Good progress!";
+    else if (total <= 19) msg = "Almost ready!";
+    else                  msg = "Goal reached!";
 
-    // 5. Signature repetition/snacking warning (> N attempts without reaching goal)
-    if (count > 7 && total < GOAL) {
-        feedback = "Increase your study time / Be cautious of frequent snacking!";
-    }
+    if (count > 7 && total < 20) msg = "Increase your study time!";
 
-    // 6. Format array and display ONCE (prevents innerHTML overwriting bug)
-    const formattedItems = `[${historyList.join(", ")}]`;
-    outLabel.innerHTML = `Total: ${total} | Average: ${parseFloat(avg.toFixed(2))} | Items: ${formattedItems} | Feedback: <b>${feedback}</b>`;
+    // Simple line-by-line print:
+    document.getElementById("res").innerHTML = 
+        "Total: " + total + "<br>" +
+        "Average: " + avg.toFixed(2) + "<br>" +
+        "Subjects: [" + items.slice(0, -2) + "]<br>" +
+        "Status: " + msg;
 
-    // 7. Clear inputs
-    inputA.value = "";
-    inputB.value = "";
-    inputA.focus();
+    document.getElementById("a").value = "";
+    document.getElementById("b").value = "";
 }
+```
 
-actionBtn.addEventListener("click", handleAction);
+#### Way B: Simple Array Method (`push` & `join`):
+```javascript
+let total = 0, count = 0;
+const list = []; // Array outside function
+
+function add() {
+    let name = document.getElementById("a").value;
+    let val = Number(document.getElementById("b").value);
+    if (!name || isNaN(val) || val <= 0) return alert("Invalid input");
+
+    count++;
+    total += val;
+    list.push(name); // Adds to array
+
+    let avg = total / count;
+    let msg = (total <= 5) ? "Low" : (total <= 12) ? "Mid" : "Goal reached!";
+    if (count > 7 && total < 20) msg = "Warning!";
+
+    document.getElementById("res").innerHTML = 
+        "Total: " + total + "<br>" +
+        "Average: " + avg.toFixed(2) + "<br>" +
+        "Subjects: [" + list.join(", ") + "]<br>" +
+        "Status: " + msg;
+
+    document.getElementById("a").value = "";
+    document.getElementById("b").value = "";
+}
 ```
 
 ---
@@ -207,27 +205,17 @@ actionBtn.addEventListener("click", evaluateVitals);
 
 ## Part 2: Question 2 — PHP Form Processing & Business Logic (10 Marks)
 
-### Universal 3-Input HTML Form (`index.html`)
+### Minimal HTML Form (`index.html` — No Extra Labels, Just Names)
 ```html
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Calculation System</title>
-</head>
+<html>
 <body>
-    <h2>Calculation System</h2>
+    <!-- Minimal form: only action, method, and name attributes needed -->
     <form action="calculate.php" method="POST">
-        <label for="val1">Attendees / Production Rate / CT1:</label><br>
-        <input type="number" id="val1" name="val1" step="any" required><br><br>
-
-        <label for="val2">Cost Per Person / Days / CT2:</label><br>
-        <input type="number" id="val2" name="val2" step="any" required><br><br>
-
-        <label for="val3">Unit Capacity / Target / CT3:</label><br>
-        <input type="number" id="val3" name="val3" step="any" required><br><br>
-
-        <input type="submit" value="Calculate">
+        <input type="number" name="a" placeholder="First Input" step="any"><br><br>
+        <input type="number" name="b" placeholder="Second Input" step="any"><br><br>
+        <input type="number" name="c" placeholder="Third Input" step="any"><br><br>
+        <button type="submit">Calculate</button>
     </form>
 </body>
 </html>
@@ -235,117 +223,71 @@ actionBtn.addEventListener("click", evaluateVitals);
 
 ---
 
+> [!TIP]
+> **Exam Writing Strategy:** Do **NOT** write wrapper functions (`function calc(...) { ... }`) unless the question explicitly asks for one! Writing direct, procedural PHP code is much faster, avoids argument passing mistakes, and earns full marks.
+
 ### Type 2A: Resource Ceiling Allocation & Waste Math (`calculate.php`)
 *Common in: Trimester 251 (Tech Fest Venue), Trimester 252 (Movie Screen Rental), Trimester 261 Set B (Mars Rover Battery)*
 
 ```php
 <?php
-function calculateBooking($people, $costPerPerson, $capacity) {
-    // 1. Partial units cannot be rented: always round UP using ceil()
-    $unitsNeeded = ceil($people / $capacity);
+$demand   = floatval($_POST['val1']);
+$rate     = floatval($_POST['val2']);
+$capacity = floatval($_POST['val3']);
 
-    // 2. Total capacity and empty/unused slots
-    $totalCapacity = $unitsNeeded * $capacity;
-    $emptyUnits = $totalCapacity - $people;
+// 1. Cannot book partial units: always round UP using ceil()
+$unitsNeeded = ceil($demand / $capacity);
 
-    // 3. Financial loss / wasted money
-    $wastedMoney = $emptyUnits * $costPerPerson;
+// 2. Empty / Unused capacity & wasted money
+$totalCapacity = $unitsNeeded * $capacity;
+$emptyUnits = $totalCapacity - $demand;
+$wastedMoney = $emptyUnits * $rate;
 
-    // 4. Efficiency status (% unused of total capacity)
-    $unusedPct = ($totalCapacity > 0) ? ($emptyUnits / $totalCapacity) * 100 : 0;
-    
-    $status = "";
-    if ($unusedPct <= 10) {
-        $status = "Efficient";
-    } elseif ($unusedPct <= 25) {
-        $status = "Acceptable";
-    } else {
-        $status = "Wasteful";
-    }
+// 3. Efficiency status (% unused of total capacity)
+$unusedPct = ($totalCapacity > 0) ? ($emptyUnits / $totalCapacity) * 100 : 0;
+$status = ($unusedPct <= 10) ? "Efficient" : (($unusedPct <= 25) ? "Acceptable" : "Wasteful");
 
-    return [
-        'units' => $unitsNeeded,
-        'empty' => $emptyUnits,
-        'waste' => $wastedMoney,
-        'pct' => $unusedPct,
-        'status' => $status
-    ];
-}
-
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $v1 = floatval($_POST['val1']);
-    $v2 = floatval($_POST['val2']);
-    $v3 = floatval($_POST['val3']);
-
-    $r = calculateBooking($v1, $v2, $v3);
-
-    echo "<h2>Resource Allocation Report</h2>";
-    echo "<table border='1' cellpadding='8'>";
-    echo "<tr>
-            <th>Required</th><th>Unit Cost</th><th>Capacity</th>
-            <th>Units Booked</th><th>Unused Units</th><th>Wasted Cost (BDT)</th><th>Status</th>
-          </tr>";
-    echo "<tr>
-            <td>{$v1}</td><td>{$v2}</td><td>{$v3}</td>
-            <td>{$r['units']}</td><td>{$r['empty']}</td>
-            <td>" . number_format($r['waste'], 2) . "</td>
-            <td>{$r['status']}</td>
-          </tr>";
-    echo "</table>";
-    echo "<br><a href='index.html'>Back</a>";
-}
+// 4. Output
+echo "<h2>Resource Allocation Report</h2>";
+echo "Units Booked: " . $unitsNeeded . "<br>";
+echo "Unused Units: " . $emptyUnits . "<br>";
+echo "Wasted Cost: " . number_format($wastedMoney, 2) . " BDT<br>";
+echo "Status: " . $status . "<br>";
 ?>
 ```
 
 ---
 
-### Type 2B: Production Rate × Days vs Target Comparison (`calculate.php`)
+### Type 2B: Production Rate × Days vs Target Comparison (`calculate.php` / `track.php`)
 *Common in: Trimester 253 (Event Sales Tracker), Trimester 261 Set A (Graduation Credits)*
 
 ```php
 <?php
-function evaluateTargetPerformance($rate, $duration, $target) {
-    $total = $rate * $duration; // e.g. items/day * days OR credits/course * courses
+$rate     = floatval($_POST['cred']);        // e.g. credits per course
+$duration = floatval($_POST['num_course']);  // e.g. number of courses
+$target   = floatval($_POST['tar_cred']);    // e.g. target graduation credits
 
-    // 4 Performance Tiers
-    $category = "";
-    if ($total >= 500) {
-        $category = "Excellent";
-    } elseif ($total >= 300) {
-        $category = "Good";
-    } elseif ($total >= 150) {
-        $category = "Average";
-    } else {
-        $category = "Poor";
-    }
+$total = $rate * $duration;
 
-    // Difference from target calculation
-    $diff = $total - $target;
-    if ($diff == 0) {
-        $diffMsg = "Target met exactly (0 difference)";
-    } elseif ($diff > 0) {
-        $diffMsg = "Above target by " . $diff;
-    } else {
-        $diffMsg = "Below target by " . abs($diff);
-    }
+// 1. 4-Tier Categorization
+$category = "Poor";
+if ($total >= 120)     $category = "Excellent";
+elseif ($total >= 90)  $category = "Good";
+elseif ($total >= 60)  $category = "Average";
 
-    return ['total' => $total, 'category' => $category, 'diffMsg' => $diffMsg];
+// 2. Target comparison (Always wrap subtraction in parentheses!)
+if ($total == $target) {
+    $state = "Exactly at the target (0 difference)";
+} elseif ($total > $target) {
+    $state = "Above from the target by " . ($total - $target);
+} else {
+    $state = "Below from the target by " . ($target - $total);
 }
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $r = floatval($_POST['val1']);
-    $d = floatval($_POST['val2']);
-    $t = floatval($_POST['val3']);
-
-    $res = evaluateTargetPerformance($r, $d, $t);
-
-    echo "<h2>Performance Report</h2>";
-    echo "<table border='1' cellpadding='8'>";
-    echo "<tr><th>Total Units</th><th>Category</th><th>Target Comparison</th></tr>";
-    echo "<tr><td>{$res['total']}</td><td>{$res['category']}</td><td>{$res['diffMsg']}</td></tr>";
-    echo "</table>";
-    echo "<br><a href='index.html'>Back</a>";
-}
+// 3. Output
+echo "Total credits completed: " . $total . "<br>";
+echo "Progress category: " . $category . "<br>";
+echo "Target comparison: " . $state . "<br>";
 ?>
 ```
 
@@ -356,14 +298,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 ```php
 <?php
-function processStudentMarks($ct1, $ct2, $ct3, $mid, $final) {
-    // Best 2 CTs average: sum of three minus the lowest, divided by 2
-    $bestTwoAvg = (($ct1 + $ct2 + $ct3) - min($ct1, $ct2, $ct3)) / 2.0;
-    $grandTotal = $bestTwoAvg + $mid + $final;
-    $status = ($grandTotal > 54) ? "Passed" : "Failed";
+$ct1   = floatval($_POST['ct1']);
+$ct2   = floatval($_POST['ct2']);
+$ct3   = floatval($_POST['ct3']);
+$mid   = floatval($_POST['mid']);
+$final = floatval($_POST['final']);
 
-    return ['ctAvg' => $bestTwoAvg, 'grandTotal' => $grandTotal, 'status' => $status];
-}
+// Best 2 CTs: sum minus the lowest, divided by 2
+$bestTwoAvg = (($ct1 + $ct2 + $ct3) - min($ct1, $ct2, $ct3)) / 2.0;
+$grandTotal = $bestTwoAvg + $mid + $final;
+$status = ($grandTotal > 54) ? "Passed" : "Failed";
+
+echo "Best 2 CTs Average: " . $bestTwoAvg . "<br>";
+echo "Grand Total: " . $grandTotal . "<br>";
+echo "Status: <b>" . $status . "</b><br>";
 ?>
 ```
 
@@ -413,85 +361,37 @@ INSERT INTO items (ItemID, ItemName, Category, Price, Stock, Rating, SaleDate, S
 
 ---
 
-### Step 2: Complete PHP-MySQL Execution Runner (`solution.php`)
+### Step 2: Minimal Execution Script (`solution.php` - Direct While Loop)
 ```php
 <?php
 $conn = new mysqli("localhost", "root", "", "exam_db");
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
+
+// Task 1: Category Summary with GROUP BY
+echo "<h3>Task 1: Category Summary</h3>";
+$res1 = $conn->query("SELECT Category, COUNT(*) AS Total, AVG(Price) AS AvgPrice FROM items GROUP BY Category");
+while ($row = $res1->fetch_assoc()) {
+    echo $row['Category'] . " - Total: " . $row['Total'] . " - Avg: " . $row['AvgPrice'] . "<br>";
 }
 
-// 1. Dynamic Table Renderer (Auto-detects column names)
-function showTable($conn, $title, $sql) {
-    echo "<h3>" . htmlspecialchars($title) . "</h3>";
-    $res = $conn->query($sql);
-    if (!$res) {
-        echo "<p style='color:red;'>SQL Error: " . $conn->error . "</p>";
-        return;
-    }
-    if ($res->num_rows > 0) {
-        echo "<table border='1' cellpadding='6' cellspacing='0'><tr>";
-        while ($f = $res->fetch_field()) {
-            echo "<th>" . htmlspecialchars($f->name) . "</th>";
-        }
-        echo "</tr>";
-        while ($row = $res->fetch_assoc()) {
-            echo "<tr>";
-            foreach ($row as $v) {
-                echo "<td>" . htmlspecialchars($v) . "</td>";
-            }
-            echo "</tr>";
-        }
-        echo "</table>";
-    } else {
-        echo "<p>0 results found.</p>";
-    }
+// Task 2: Conditional UPDATE
+$conn->query("UPDATE items SET Status = 'Discount' WHERE Price < 1000 AND Status <> 'Returned'");
+echo "Task 2 Updated!<br>";
+
+// Task 3: Bonus / Increment with Ceiling Cap
+$conn->query("UPDATE items SET Price = Price + 500 WHERE Price > 300 AND (Price + 500) <= 60000");
+echo "Task 3 Updated!<br>";
+
+// Task 4: Subquery / Relative Average Comparison
+echo "<h3>Task 4: High Value Items</h3>";
+$res4 = $conn->query("SELECT ItemName, Price, CASE WHEN Price > (SELECT AVG(Price) FROM items t2 WHERE t2.Category = items.Category) THEN 'Top Seller' ELSE 'Regular Seller' END AS Status FROM items");
+while ($row = $res4->fetch_assoc()) {
+    echo $row['ItemName'] . " - " . $row['Price'] . " - " . $row['Status'] . "<br>";
 }
 
-// 2. Safe Update Runner
-function runUpdate($conn, $title, $sql) {
-    echo "<h3>" . htmlspecialchars($title) . "</h3>";
-    if ($conn->query($sql) === TRUE) {
-        echo "<p style='color:green;'>Updated successfully! Affected rows: " . $conn->affected_rows . "</p>";
-    } else {
-        echo "<p style='color:red;'>Update error: " . $conn->error . "</p>";
-    }
-}
-
-// 3. Single Scalar Extractor
-function showSingle($conn, $title, $sql, $colName) {
-    $res = $conn->query($sql);
-    if ($res && $row = $res->fetch_assoc()) {
-        echo "<p><b>" . htmlspecialchars($title) . ": " . number_format($row[$colName], 2) . "</b></p>";
-    }
-}
-
-// ==========================================
-// RUNNING THE 4 EXAM TASKS IN SEQUENCE:
-// ==========================================
-
-// Task 1: GROUP BY Summary with HAVING & ORDER BY
-showTable($conn, "Task 1: Category Summary (Rating > 4.4)", 
-    "SELECT Category, COUNT(*) AS TotalItems, AVG(Rating) AS AvgRating, SUM(Stock) AS TotalStock 
-     FROM items GROUP BY Category HAVING AVG(Rating) > 4.4 ORDER BY AvgRating DESC");
-
-// Task 2: Conditional UPDATE with multiple criteria
-runUpdate($conn, "Task 2: Status Update for Low Price & Not Returned", 
-    "UPDATE items SET Status = 'Discounted' WHERE Price < 1000 AND Status <> 'Returned'");
-
-// Task 3: Bonus / Increment with Upper Ceiling Cap
-runUpdate($conn, "Task 3: Fixed Bonus with Upper Limit", 
-    "UPDATE items SET Price = Price + 500 WHERE Price > 300 AND (Price + 500) <= 60000");
-
-// Task 4: Relative Average Comparison (Subquery)
-showTable($conn, "Task 4: Item Classification Against Category Average", 
-    "SELECT i.ItemName, i.Category, i.Price, 
-            CASE WHEN i.Price > (SELECT AVG(i2.Price) FROM items i2 WHERE i2.Category = i.Category) 
-                 THEN 'Top Seller' ELSE 'Regular Seller' END AS Tier 
-     FROM items i ORDER BY i.Price DESC");
-
-// Whole Table Net Worth
-showSingle($conn, "Total Net Worth", "SELECT SUM(Price * Stock) AS NetWorth FROM items", "NetWorth");
+// Single Total (if asked)
+$res5 = $conn->query("SELECT SUM(Price * Stock) AS NetWorth FROM items");
+$row5 = $res5->fetch_assoc();
+echo "<b>Total Net Worth: " . $row5['NetWorth'] . " BDT</b>";
 
 $conn->close();
 ?>
