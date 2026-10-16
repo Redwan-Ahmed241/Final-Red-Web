@@ -23,12 +23,12 @@ Comprehensive analysis of previous trimester exam papers: **Trimester 251**, **T
 
 #### The Blueprint:
 1. **HTML Architecture (`index.html` or `Index.html`)**:
-   - 1 or 2 `<input>` fields (`type="text"`, `type="number"`, or `type="password"`).
+   - 1 or 2 `<input>` fields (`type="text"` for name/subject, `type="number"` for numeric values).
    - An action `<button>` (e.g. *"Check Strength"*, *"Add Calories"*, *"Add Study"*, *"Save Reading"*).
    - An output container (usually `<label id="...">` or `<div>`) placed directly below the button.
 2. **JavaScript State & Logic (`script.js` or `Script.js`)**:
    - **Target Constant**: A benchmark constant (e.g., `const GOAL = 2000;`, `const TARGET = 100;`, `const WEEKLY_GOAL = 20;`).
-   - **Running State Tracking**: Global/closure variables for running sum (`let total = 0;`), count of attempts/sessions/entries (`let count = 0;`), and optionally an array (`let history = [];`).
+   - **Running State Tracking**: Global/closure variables for running sum (`let total = 0;`), count of attempts/sessions/entries (`let count = 0;`), and string/item arrays (`const stringArray = [];`).
    - **Trigger Function**: Bound via `button.addEventListener("click", ...)` or `onclick`.
    - **4-Tier Feedback Ladder**: A chained `if...else if...else` structure classifying the current progress.
    - **The Repetition/Snacking Warning (Signature Exam Requirement)**:
@@ -37,39 +37,85 @@ Comprehensive analysis of previous trimester exam papers: **Trimester 251**, **T
      - *261 Set A*: If user enters `> 7` sessions without reaching 20 hours, display *"Increase your study time!"*.
      - *261 Set B*: Computes `RiskScore = (100 - SpO2) * 2 + |HR - 80| * 0.5` with SAFE / WARNING / DANGER.
 
-#### Exam JS Solution Template:
+#### Critical Patterns for String Arrays & Output:
+- **Storing Strings in an Array**:
+  ```javascript
+  const stringList = []; // Declared OUTSIDE the function so it persists!
+  
+  function onAction() {
+      const textVal = document.getElementById("textInput").value.trim();
+      if (!textVal) return;
+      
+      stringList.push(textVal); // Stores every entered string
+      // OR to prevent duplicates:
+      // if (!stringList.includes(textVal)) stringList.push(textVal);
+  }
+  ```
+- **Formatting String Arrays for Output**:
+  - Bracket format: `` `[${stringList.join(", ")}]` `` &rarr; `[English, Bangla, Math]`
+  - Plain format: `stringList.join(", ")` &rarr; `English, Bangla, Math`
+  - HTML bullet list: `stringList.map(item => \`<li>\${item}</li>\`).join("")`
+- **Avoid the `innerHTML` Overwrite Trap**:
+  - ❌ **Wrong**: Assigning `element.innerHTML = ...` multiple times in a row. Each line wipes out the previous line!
+  - ✅ **Correct**: Store pieces in local variables (`total`, `avg`, `formattedArray`, `feedback`) and assign to `innerHTML` or `textContent` **once** at the end.
+
+#### Exam JS Solution Template (With String Array + Numeric Tracker):
 ```javascript
-const GOAL = 2000; // Or 100, 20, etc.
+const GOAL = 20; // Target goal (e.g., 20 hours, 2000 kcal)
 let runningTotal = 0;
 let entryCount = 0;
-const historyArray = [];
+const historyItems = []; // Persists all entered string names/subjects
 
-const inputElement = document.getElementById("myInput");
-const actionBtn = document.getElementById("myBtn");
-const displayLabel = document.getElementById("myLabel");
+const nameInput = document.getElementById("nameInput");
+const valueInput = document.getElementById("valueInput");
+const actionBtn = document.getElementById("actionBtn");
+const displayArea = document.getElementById("displayArea");
 
 function handleAction() {
-    const value = parseFloat(inputElement.value);
-    if (isNaN(value) || value <= 0) return;
+    // 1. Read input values inside function
+    const name = nameInput.value.trim();
+    const value = parseFloat(valueInput.value);
 
-    entryCount++;
-    runningTotal += value;
-    historyArray.push(value);
-
-    // 4-Tier Feedback
-    let feedback = "";
-    if (runningTotal <= 800) feedback = "Tier 1 message";
-    else if (runningTotal <= 1600) feedback = "Tier 2 message";
-    else if (runningTotal < GOAL) feedback = "Tier 3 message";
-    else feedback = "Tier 4 Goal Reached!";
-
-    // Warning condition
-    if (entryCount > 10 && runningTotal < GOAL) {
-        feedback += " Warning message!";
+    // 2. Validate
+    if (!name || isNaN(value) || value <= 0) {
+        alert("Please enter a valid name and positive value.");
+        return;
     }
 
-    displayLabel.textContent = `Total: ${runningTotal} | Feedback: ${feedback}`;
-    inputElement.value = "";
+    // 3. Update state
+    entryCount++;
+    runningTotal += value;
+    historyItems.push(name); // Store string in array
+
+    // 4. Calculate average
+    const average = runningTotal / entryCount;
+
+    // 5. 4-Tier Feedback ladder
+    let feedback = "";
+    if (runningTotal <= 5) {
+        feedback = "Start practicing regularly!";
+    } else if (runningTotal <= 12) {
+        feedback = "Good progress!";
+    } else if (runningTotal <= 19) {
+        feedback = "Almost ready!";
+    } else {
+        feedback = "Goal reached!";
+    }
+
+    // 6. Exam signature warning condition
+    if (entryCount > 7 && runningTotal < GOAL) {
+        feedback = "Increase your effort!";
+    }
+
+    // 7. Format array and output ONCE (prevents overwriting)
+    const itemsFormatted = `[${historyItems.join(", ")}]`;
+    displayArea.innerHTML = 
+        `Total: ${runningTotal} | Average: ${average.toFixed(2)} | Items: ${itemsFormatted} | Feedback: <b>${feedback}</b>`;
+
+    // 8. Clear inputs
+    nameInput.value = "";
+    valueInput.value = "";
+    nameInput.focus();
 }
 
 actionBtn.addEventListener("click", handleAction);

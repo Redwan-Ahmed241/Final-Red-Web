@@ -1,0 +1,86 @@
+{
+  "name": "php-sql-autocomplete",
+  "displayName": "PHP SQL Autocomplete",
+  "description": "Offline autocompletion for PHP + MySQL: $row['column'] keys from your SELECT queries, table/column names inside SQL strings, and schema-aware mysqli/PDO snippets.",
+  "version": "0.1.0",
+  "publisher": "shah-redwan-ahmed",
+  "license": "MIT",
+  "engines": {
+    "vscode": "^1.75.0"
+  },
+  "categories": [
+    "Programming Languages",
+    "Snippets"
+  ],
+  "keywords": [
+    "php",
+    "mysql",
+    "mysqli",
+    "pdo",
+    "sql",
+    "autocomplete"
+  ],
+  "activationEvents": [
+    "onLanguage:php"
+  ],
+  "main": "./src/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "phpSqlAutocomplete.rescan",
+        "title": "PHP SQL: Rescan Database Schema"
+      },
+      {
+        "command": "phpSqlAutocomplete.showSchema",
+        "title": "PHP SQL: Show Detected Schema"
+      }
+    ],
+    "configuration": {
+      "title": "PHP SQL Autocomplete",
+      "properties": {
+        "phpSqlAutocomplete.style": {
+          "type": "string",
+          "enum": [
+            "auto",
+            "mysqli-oop",
+            "mysqli",
+            "pdo"
+          ],
+          "default": "auto",
+          "description": "Code style used by the db* snippets. 'auto' detects it from the current file (default: mysqli-oop)."
+        },
+        "phpSqlAutocomplete.schemaGlob": {
+          "type": "string",
+          "default": "**/*.{sql,php}",
+          "description": "Files scanned for CREATE TABLE / INSERT INTO / SELECT statements to build the schema."
+        },
+        "phpSqlAutocomplete.excludeGlob": {
+          "type": "string",
+          "default": "**/{node_modules,vendor,.git,.kilo}/**",
+          "description": "Files excluded from schema scanning."
+        },
+        "phpSqlAutocomplete.defaultHost": {
+          "type": "string",
+          "default": "localhost"
+        },
+        "phpSqlAutocomplete.defaultUser": {
+          "type": "string",
+          "default": "root"
+        },
+        "phpSqlAutocomplete.defaultPassword": {
+          "type": "string",
+          "default": ""
+        }
+      }
+    },
+    "configurationDefaults": {
+      "[php]": {
+        "editor.quickSuggestions": {
+          "other": "on",
+          "comments": "off",
+          "strings": "on"
+        }
+      }
+    }
+  }
+}

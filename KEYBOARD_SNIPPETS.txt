@@ -40,7 +40,9 @@ function processEntry() {
         feedback += " Warning: Too many entries without reaching goal!";
     }
 
-    outputLabel.textContent = `Total: ${total} | Average: ${parseFloat(average.toFixed(2))} | Entries: ${count} | Feedback: ${feedback}`;
+    // Format string array for display
+    const itemsFormatted = items.length > 0 ? `[${items.join(", ")}]` : "[]";
+    outputLabel.innerHTML = `Total: ${total} | Average: ${parseFloat(average.toFixed(2))} | Items: ${itemsFormatted} | Feedback: <b>${feedback}</b>`;
 
     if (inputName) inputName.value = "";
     inputValue.value = "";
@@ -48,6 +50,34 @@ function processEntry() {
 }
 
 actionBtn.addEventListener("click", processEntry);
+
+
+=== CHEAT SHEET: JAVASCRIPT STRING ARRAYS & DOM OUTPUT ===
+/*
+1. DECLARE OUTSIDE FUNCTION:
+   const items = []; // Must be outside so it doesn't reset on every click!
+
+2. PUSH STRINGS INSIDE FUNCTION:
+   const str = document.getElementById("nameInput").value.trim();
+   if (str) items.push(str);
+
+3. PREVENT DUPLICATES (IF REQUIRED):
+   if (!items.includes(str)) items.push(str);
+
+4. DISPLAY FORMATS:
+   - Bracketed list: `[${items.join(", ")}]`  -->  [English, Bangla, Math]
+   - Plain comma list: items.join(", ")      -->  English, Bangla, Math
+   - HTML bullet list: items.map(i => `<li>${i}</li>`).join("")
+
+5. THE INNERHTML OVERWRITE TRAP:
+   ❌ WRONG:
+      label.innerHTML = "Total: " + total;
+      label.innerHTML = "Items: " + items; // Wipes out total!
+      label.innerHTML = feedback;          // Wipes out items!
+   ✅ CORRECT:
+      Build one combined string and assign ONCE:
+      label.innerHTML = `Total: ${total} | Items: [${items.join(", ")}] | ${feedback}`;
+*/
 
 
 === SNIPPET 2: JAVASCRIPT FORMULA & ARRAYS (PREFIX: examjsformula) ===
@@ -302,3 +332,121 @@ if ($singleResult && $row = $singleResult->fetch_assoc()) {
 
 $conn->close();
 ?>
+
+
+=== SNIPPET 8: JAVASCRIPT PASSWORD STRENGTH & REGEX (PREFIX: examjspassword) ===
+
+let attempts = 0;
+const inputPassword = document.getElementById("passwordInput");
+const checkBtn = document.getElementById("checkBtn");
+const statusLabel = document.getElementById("statusLabel");
+
+function evaluatePassword() {
+    const p = inputPassword.value;
+    attempts++;
+    let score = 0;
+
+    // Length criteria
+    if (p.length >= 6) {
+        score += Math.floor((p.length - 6) / 2) * 10;
+    }
+
+    // Regex checks
+    if (/[A-Z]/.test(p)) score += 15;
+    if (/[a-z]/.test(p)) score += 15;
+    if (/[0-9]/.test(p)) score += 20;
+    if (/[!@#$%^&*]/.test(p)) score += 25;
+
+    // 5 Tiers
+    let lvl = (score <= 30) ? "Very Weak" : (score <= 50) ? "Weak" :
+              (score <= 70) ? "Medium" : (score <= 90) ? "Strong" : "Very Strong";
+
+    let msg = (score >= 100) ? "Perfect Password! Success!" : `Score: ${score} - ${lvl}`;
+
+    if (attempts > 8 && score < 71) {
+        msg += " | Need practice! Tips: Add uppercase, digits & symbols.";
+    }
+
+    statusLabel.innerHTML = msg;
+}
+
+checkBtn.addEventListener("click", evaluatePassword);
+
+
+=== SNIPPET 9: PHP BEST 2 OF 3 CT MARKS + PASS/FAIL (PREFIX: examphpbest2) ===
+
+<?php
+function processStudentMarks($ct1, $ct2, $ct3, $mid, $final) {
+    // Best 2 CTs: sum minus the lowest, divided by 2
+    $bestTwoAvg = (($ct1 + $ct2 + $ct3) - min($ct1, $ct2, $ct3)) / 2.0;
+    $grandTotal = $bestTwoAvg + $mid + $final;
+    $status = ($grandTotal > 54) ? "Passed" : "Failed";
+
+    return [
+        'bestAvg' => $bestTwoAvg,
+        'grandTotal' => $grandTotal,
+        'status' => $status
+    ];
+}
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $c1 = floatval($_POST['ct1']);
+    $c2 = floatval($_POST['ct2']);
+    $c3 = floatval($_POST['ct3']);
+    $m  = floatval($_POST['mid']);
+    $f  = floatval($_POST['final']);
+
+    $res = processStudentMarks($c1, $c2, $c3, $m, $f);
+    echo "Best 2 CT Avg: {$res['bestAvg']} | Total: {$res['grandTotal']} | Status: <b>{$res['status']}</b>";
+}
+?>
+
+
+=== SNIPPET 10: ALL 15 SQL QUERY ARCHETYPES (PREFIX: examsqlqueries) ===
+/*
+-- 1. Count rows per group (243, 251, 253, 261)
+SELECT Category, COUNT(*) AS Total FROM items GROUP BY Category;
+
+-- 2. Total and average per group (242, 252)
+SELECT Category, SUM(Price) AS Revenue, AVG(Price) AS AvgPrice FROM items GROUP BY Category;
+
+-- 3. Only groups with more than 1 row (HAVING) (253)
+SELECT Status, COUNT(*) AS Total FROM items GROUP BY Status HAVING COUNT(*) > 1;
+
+-- 4. Top 2 days by revenue in date range (242)
+SELECT SaleDate, SUM(Price) AS Revenue FROM items WHERE SaleDate BETWEEN '2024-01-01' AND '2024-01-31' GROUP BY SaleDate ORDER BY Revenue DESC LIMIT 2;
+
+-- 5. Substring LIKE with OR & ORDER BY (261)
+SELECT ItemName, Category, Rating FROM items WHERE Rating > 4.5 OR ItemName LIKE '%Pen%' ORDER BY Rating DESC;
+
+-- 6. Multi-condition filter (AND) (261)
+SELECT ItemName, Price FROM items WHERE Price > 400 AND Category = 'Electronics';
+
+-- 7. Whole-table total net worth (Price * Stock) (261)
+SELECT SUM(Price * Stock) AS NetWorth FROM items;
+
+-- 8. Count + Avg + Sum with HAVING on Avg (261)
+SELECT Category, COUNT(*) AS Items, AVG(Rating) AS AvgRating, SUM(Stock) AS TotalStock FROM items GROUP BY Category HAVING AVG(Rating) > 4.4 ORDER BY AvgRating DESC;
+
+-- 9. Calculated expression in HAVING (261)
+SELECT Category, SUM(Price * Stock) AS Value FROM items GROUP BY Category HAVING SUM(Price * Stock) > 100000 ORDER BY Value DESC;
+
+-- 10. Distinct dates count per group (242)
+SELECT Category, AVG(Stock) FROM items GROUP BY Category HAVING COUNT(DISTINCT SaleDate) >= 2;
+
+-- 11. Relative comparison against category average (252)
+SELECT i.ItemName, i.Price, CASE WHEN i.Price > (SELECT AVG(i2.Price) FROM items i2 WHERE i2.Category = i.Category) THEN 'Top Seller' ELSE 'Regular Seller' END AS Status FROM items i;
+
+-- 12. Conditional update with NOT EQUAL <> (243, 251, 252, 253)
+UPDATE items SET Status = 'Low' WHERE Price < 1000 AND Status <> 'Returned';
+
+-- 13. Fixed bonus with upper ceiling cap (243, 251)
+UPDATE items SET Price = Price + 5000 WHERE Price > 3000 AND (Price + 5000) <= 60000;
+
+-- 14. 10% discount (* 0.90) or 10% raise (* 1.10) (252, 253, 261)
+UPDATE items SET Price = Price * 0.90 WHERE Category = 'Furniture';
+
+-- 15. Update 2 columns at once (261)
+UPDATE items SET Rating = Rating + 0.2, Price = Price * 1.10 WHERE Rating BETWEEN 4.0 AND 4.5 AND Price > 0;
+*/
+
